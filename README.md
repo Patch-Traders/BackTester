@@ -4,6 +4,15 @@ Repository for custom back testing environment for deploying algorithmic trading
 
 Consider implementing a For-Loop back testing system to get our bearings before tackling an Event-Driven backtesting system. 
 
+Need to Implement: 
+- Securities Master Database
+- Trading Strategies
+- Portfolio and Order Management 
+- Risk and Position Management 
+- Execution Handling (both for backtesting and live trading) 
+- Performance and Reporting
+- Deployment & Monitoring (probably not an immediate focus) 
+
 Helpful Links: 
 
 QuantStart - Building Your Own Backtester
