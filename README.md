@@ -18,7 +18,7 @@ Helpful Links:
 QuantStart - Building Your Own Backtester
 https://www.quantstart.com/articles/Should-You-Build-Your-Own-Backtester/
 
-QuantStart - First of Four Part Series Specifying Event-Driven Backtesting Development
+QuantStart - First of Three Part Series Specifying Event-Driven Backtesting Development
 https://www.quantstart.com/articles/Event-Driven-Backtesting-with-Python-Part-I/
 
 Reddit Thread - Requirements for Backtesting System
