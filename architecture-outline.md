@@ -6,6 +6,7 @@ __Event Queue__
 
 __DataHandler__
 * The DataHandler is an abstract base class (ABC) that presents an interface for handling both historical or live market data. This provides significant flexibility as the Strategy and Portfolio modules can thus be reused between both approaches. The DataHandler generates a new MarketEvent upon every heartbeat of the system (see below).
+..* This is an unordered sublist
 
 __Strategy__
 * The Strategy is also an ABC that presents an interface for taking market data and generating corresponding SignalEvents, which are ultimately utilised by the 
