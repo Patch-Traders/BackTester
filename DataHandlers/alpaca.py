@@ -1,14 +1,16 @@
 import datetime
 import os
+from polygon import RESTClient
 from data-handler import DataHandler
 from nyse-holidays import _NYSE_HOLIDAYS 
 
-"""
-Retrieves equities data from Alpaca with the help of Polygon API
 
-BarSize: 1 day
-"""
 class Alpaca(DataHandler):
+    """
+    Retrieves equities data from Alpaca with the help of Polygon API
+
+    BarSize: 1 day
+    """
 
     def __init__(self, tickers: List[str], lookback_length: int):
         self.holidays = _NYSE_HOLIDAYS
@@ -19,10 +21,11 @@ class Alpaca(DataHandler):
         self.tickers = tickers # array of tickers
         self.ticker_data = dict() # { key:ticker_name : value:pricing_data }
 
-     """
-    Retrieves lastest bar data from specified time period
-    """
+   
     def get_ticker_data(self, tickers: List[str], lookback_length:str):
+        """
+        Retrieves lastest bar data from specified time period
+        """
 
         # setting up client 
         client = RESTClient(self.api_key)
@@ -32,6 +35,7 @@ class Alpaca(DataHandler):
             response = client.stocks_equities_aggregates(stock, 1, self.bar_distance,
                                                          self.begin_date - datetime.timedelta(days=1),
                                                          self.end_date + datetime.timedelta(days=1))
+
             # ensures data is retrieved
             if response.results is None:
                     raise Exception("Unable to retrieve market data")
@@ -39,19 +43,22 @@ class Alpaca(DataHandler):
             # puts ticker with corresponding pricing over specified period 
             self.ticker_data[stock] = response.results
 
-    """
-    Retrieves the latest bar from specified database to add to bar container
-    """
     def update_ticker_data(self, ticker_symbol:str):
 
+        """
+        Retrieves the latest bar from specified database to add to bar container.
+        Only necesssary when live trading. 
+        """
+        return -1:
         # is this possible with REST API or do we need to use WebSockets for constant connection? 
-        pass
+        # also need to use asynchonous techniques to pull data while managing the portfolio 
+    
 
 
-    """
-    Calculates the appropriate start date accounting for weekends and holidays
-    """
     def calculate_begin_date(num_days:int):
+        """
+        Calculates the appropriate start date accounting for weekends and holidays
+        """
 
         # considers weekends and holidays to look back appropriate number of days 
         begin_date = None  
