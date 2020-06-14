@@ -1,9 +1,8 @@
 import datetime
 import os
+import queue
 from polygon import RESTClient
 from data-handler import DataHandler
-from nyse-holidays import _NYSE_HOLIDAYS 
-
 
 class Alpaca(DataHandler):
     """
@@ -12,16 +11,27 @@ class Alpaca(DataHandler):
     BarSize: 1 day
     """
 
-    def __init__(self, tickers: List[str], lookback_length: int):
-        self.holidays = _NYSE_HOLIDAYS
-        #self.api_key = os.environ['APCA_API_KEY_ID'] # API key set as environment variable
-        self.begin_date = self.calculate_begin_date(
-            datetime.timedelta(days = lookback_length).days
-        )
-        self.tickers = tickers # array of tickers
-        self.ticker_data = dict() # { key:ticker_name : value:pricing_data }
+    def __init__(self, tickers: List[str], begin_date: str, end_date: str, bar_length: int):
+         """
+        Dates must be given in the ISO 8601 Format specification YYYY-MM-DD
+        :param: API key to access data from polygon (need to set as an environoment variable)
+        :param begin_date: Date upon which trading will initiate
+        :param end_date: Date upon which trading will end
+        :param tickers: list containing all stocks to be traded
+        :param bar_length: minute, hour, day, week etc
+        """
+        #self.api_key = os.environ['APCA_API_KEY_ID'] 
+        self.tickers = tickers 
+        self.begin_date = begin_date
+        self.end_date = end_date
+        self.ticker_data = queue.Queue( maxsize = 
+            datetime.strptime(begin_date) - datetime.strptime(end_date) 
+            ) # maxSize is the time delta between dates (includes weekends/holidays)
+        self.bar_length = bar_length
 
    
+    #TODO ******** --> need to rework logic here again *********
+
     def get_ticker_data(self, tickers: List[str], lookback_length:str):
         """
         Retrieves lastest bar data from specified time period
@@ -36,6 +46,7 @@ class Alpaca(DataHandler):
                                                          self.begin_date - datetime.timedelta(days=1),
                                                          self.end_date + datetime.timedelta(days=1))
 
+            print(response)
             # ensures data is retrieved
             if response.results is None:
                     raise Exception("Unable to retrieve market data")
@@ -51,32 +62,10 @@ class Alpaca(DataHandler):
         """
         return -1:
         # is this possible with REST API or do we need to use WebSockets for constant connection? 
-        # also need to use asynchonous techniques to pull data while managing the portfolio 
-    
-
-
-    def calculate_begin_date(num_days:int):
-        """
-        Calculates the appropriate start date accounting for weekends and holidays
-        """
-
-        # considers weekends and holidays to look back appropriate number of days 
-        begin_date = None  
-        while num_days > 0:
-            if begin_date.isoweekday() == 7:
-                begin_date -= datetime.timedelta(days=2)
-            elif begin_date.isoweekday() == 6:
-                begin_date -= datetime.timedelta(days=1)
-            elif begin_date in self.__NYSE_HOLIDAYS:
-                begin_date -= datetime.timedelta(days=1)
-            else:
-                begin_date -= datetime.timedelta(days=1)
-                num_days -= 1
-        
-        return begin_date
-
+        # also need to use asynchonous techniques to pull data while managing
 
 
 if __name__ == "__main__":
 
     print("Hello World")
+    alpaca = Alpaca()
