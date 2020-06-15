@@ -3,17 +3,41 @@ import os
 import queue
 from Events.MarketEvent import MarketEvent
 from Events.Stock import Stock
-from polygon import RESTClient
+import alpaca_trade_api as tradeapi
 from DataHandlerABC import DataHandler
 
 
 class Alpaca(DataHandler):
-    """
+    """"
     Retrieves equities data from Alpaca with the help of Polygon API
 
     BarSize: 1 day
     """
     def __init__(self, tickers: list[str], begin_date: str, end_date: str, bar_size: str):
+        """
+        Dates must be given in the ISO 8601 Format specification YYYY-MM-DD
+        :param tickers: list containing all stocks to be traded
+        :param begin_date: Date upon which trading will initiate
+        :param end_date: Date upon which trading will end
+        :param bar_size: minute, hour, day, week etc...
+        """
+        self.__api = tradeapi.REST(key_id=os.environ['APCA_API_KEY_ID'], secret_key=os.environ['APCA_API_SECRET_KEY'],
+                                   api_version='v2')
+        self.__tickers = tickers
+        self.__begin_date = datetime.date.fromisoformat(begin_date)
+        self.__end_date = datetime.date.fromisoformat(end_date)
+
+    def get_initial_barset(self, ticker_symbol:str, lookback_length:str):
+
+
+    def update_barset(self, ticker_symbol:str):
+
+
+
+
+
+
+    '''def __init__(self, tickers: list[str], begin_date: str, end_date: str, bar_size: str):
         """
         Dates must be given in the ISO 8601 Format specification YYYY-MM-DD
         :param tickers: list containing all stocks to be traded
@@ -89,8 +113,10 @@ class Alpaca(DataHandler):
         # is this possible with REST API or do we need to use WebSockets for constant connection? 
         # also need to use asynchonous techniques to pull data while managing
 
+'''
+
 
 if __name__ == "__main__":
 
-    print("Hello World")
+    print("Hello")
     alpaca = Alpaca()
