@@ -13,7 +13,7 @@ class Alpaca(DataHandler):
 
     BarSize: 1 day
     """
-    def __init__(self, tickers: list[str], begin_date: str, end_date: str, bar_size: int):
+    def __init__(self, tickers: list[str], begin_date: str, end_date: str, bar_size: str):
         """
         Dates must be given in the ISO 8601 Format specification YYYY-MM-DD
         :param tickers: list containing all stocks to be traded
@@ -27,7 +27,7 @@ class Alpaca(DataHandler):
         self.begin_date: str = begin_date
         self.end_date: str = end_date
         self.look_back: int = datetime.strptime(begin_date) - datetime.strptime(end_date)
-        self.market_events = queue.Queue( maxsize = self.look_back )  # Queue of market_events to be processed by strategy
+        self.market_events = queue.Queue(maxsize=self.look_back)  # Queue of market_events to be processed by strategy
         self.bar_size = bar_size
 
     def build_ticker_queue(self):
