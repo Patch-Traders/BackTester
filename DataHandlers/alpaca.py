@@ -1,8 +1,5 @@
 import datetime
 import os
-import queue
-from Events.MarketEvent import MarketEvent
-from Events.Stock import Stock
 import alpaca_trade_api as tradeapi
 from data_handler import dataHandler
 import numpy as np
@@ -15,7 +12,7 @@ class Alpaca(dataHandler):
 
     BarSize: 1 day
     """
-    def __init__(self, tickers: list[str], begin_date: str, end_date: str, bar_size: str):
+    def __init__(self, tickers: list, begin_date: str, end_date: str, bar_size: str):
         """
         Dates must be given in the ISO 8601 Format specification YYYY-MM-DD
         :param tickers: list containing all stocks to be traded
@@ -28,6 +25,24 @@ class Alpaca(dataHandler):
         self.__tickers = tickers
         self.__begin_date = datetime.date.fromisoformat(begin_date)
         self.__end_date = datetime.date.fromisoformat(end_date)
+        self.__bar_size = bar_size
+
+    def __correct_begin_date(self, look_back):
+        """
+        Because we want to be able to have a static lookback period we are uncertain of the actual first date we need
+        to request data for as there are holidays and weekends in unpredictable quantities that create breaks in the
+        dataset if not accounted for we would not be able to gurantee that a lookback period sized dataset is created
+        """
+        while look_back > 0:
+            if self.__begin_date.isoweekday() == 7:
+                self.__begin_date -= datetime.timedelta(days=2)
+            elif self.__begin_date.isoweekday() == 6:
+                self.__begin_date -= datetime.timedelta(days=1)
+            elif self.__begin_date in NYSE_HOLIDAYS:
+                self.__begin_date -= datetime.timedelta(days=1)
+            else:
+                self.__begin_date -= datetime.timedelta(days=1)
+                look_back -= 1
 
     def get_initial_barset(self, ticker_symbol:str, lookback_length:str):
         """
@@ -36,9 +51,13 @@ class Alpaca(dataHandler):
         :param lookback_length: the size of the dataset and the period of time it spans
         :return: TODO What am I returning here? the NP array? nothing?
         """
+        self.__correct_begin_date(lookback_length)
+        for ticker in self.__tickers:
+            a = self.__api.polygon.historic_agg_v2(ticker, 1, self.__bar_size, _from="2019-01-01", to="2019-05-01")
+        print("S")
 
     def update_barset(self, ticker_symbol:str):
-
+        pass
 
 
 
