@@ -6,7 +6,7 @@ The portfolio will receive the event and process it with the help of the risk ma
 incorporate the position into the portfolio. 
 """
 
-class SignalEvent(): 
+class SignalEvent: 
 
     # TODO --> varying time stamps depending on 
     def __init__(self, ticker: str, position: str, time_stamp: str):

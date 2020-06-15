@@ -5,7 +5,7 @@ May only be necessary when live trading and there is a difference between the
 fill and the order events. 
 """
 
-class OrderEvent(): 
+class OrderEvent: 
 
     def __init__(self, ticker: str, quantity: int, price: int ):
         """

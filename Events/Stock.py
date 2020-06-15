@@ -1,6 +1,6 @@
 
 
-class Stock():
+class Stock:
     """
     Makes accessing stock data within a given MarketEvent to be more intuitive and accessible
     """
