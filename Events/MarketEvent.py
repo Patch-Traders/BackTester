@@ -11,7 +11,7 @@ The MarketEvents are packaged into a stack or queue (depending on how they are r
 by the DataHandler and then returned back to the Strategy for processing. 
  """
 
- class MarketEvent():
+ class MarketEvent:
 
     def __init__(self, stock_dict):
         self.__tickers = stock_dict
