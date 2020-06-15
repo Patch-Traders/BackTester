@@ -13,13 +13,13 @@ class DataHandler(ABC):
     """
     @abstractmethod
     def get_latest_bars(self, ticker_symbol:str, lookback_length:str):
-        pass
+        raise NotImplementedError("Error: Implementation for 'get_latest_bars' is required')
 
     """
     Retrieves the latest bar from specified database to add to bar container
     """
     @abstractmethod
     def update_bars(self, ticker_symbol:str):
-        pass
+        raise NotImplementedError("Error: Implementation for 'update_bars' is required')
 
     
