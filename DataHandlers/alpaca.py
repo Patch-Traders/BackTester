@@ -4,7 +4,8 @@ import queue
 from Events.MarketEvent import MarketEvent
 from Events.Stock import Stock
 from polygon import RESTClient
-from data-handler import DataHandler
+from DataHandlerABC import DataHandler
+
 
 class Alpaca(DataHandler):
     """
@@ -12,9 +13,8 @@ class Alpaca(DataHandler):
 
     BarSize: 1 day
     """
-
-    def __init__(self, tickers: List[str], begin_date: str, end_date: str, bar_size: int):
-         """
+    def __init__(self, tickers: list[str], begin_date: str, end_date: str, bar_size: int):
+        """
         Dates must be given in the ISO 8601 Format specification YYYY-MM-DD
         :param tickers: list containing all stocks to be traded
         :param begin_date: Date upon which trading will initiate
@@ -22,7 +22,7 @@ class Alpaca(DataHandler):
         :param bar_size: minute, hour, day, week etc...
         """
         #self.api_key = os.environ['APCA_API_KEY_ID'] # API key to access polygon data (set as environoment variable )
-        self.tickers: List[str] = tickers 
+        self.tickers: list[str] = tickers
         self.ticker_data: dict = dict() # dictionary of ticker symbols with their corresponding data
         self.begin_date: str = begin_date
         self.end_date: str = end_date
@@ -30,7 +30,7 @@ class Alpaca(DataHandler):
         self.market_events = queue.Queue( maxsize = self.look_back )  # Queue of market_events to be processed by strategy
         self.bar_size = bar_size
 
-    def build_ticker_queue():
+    def build_ticker_queue(self):
         """
         Packages ticker data into MarketEvents put in a queue to then be processed by the strategy
         """
