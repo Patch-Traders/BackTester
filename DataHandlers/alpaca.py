@@ -4,7 +4,8 @@ import queue
 from Events.MarketEvent import MarketEvent
 from Events.Stock import Stock
 import alpaca_trade_api as tradeapi
-from data_handler import DataHandler
+from data_handler import dataHandler
+import numpy as np
 from nyse_holidays import NYSE_HOLIDAYS
 
 
@@ -29,7 +30,12 @@ class Alpaca(dataHandler):
         self.__end_date = datetime.date.fromisoformat(end_date)
 
     def get_initial_barset(self, ticker_symbol:str, lookback_length:str):
-
+        """
+        Retrieves the initial barset for ticker_symbol from alpaca
+        :param ticker_symbol: symbol from which data is retrieved
+        :param lookback_length: the size of the dataset and the period of time it spans
+        :return: TODO What am I returning here? the NP array? nothing?
+        """
 
     def update_barset(self, ticker_symbol:str):
 

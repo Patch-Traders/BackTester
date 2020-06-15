@@ -2,27 +2,19 @@
 
 Repository for custom back testing environment for deploying algorithmic trading strategies. 
 
-Consider implementing a For-Loop back testing system to get our bearings before tackling an Event-Driven backtesting system. 
-
 Need to Implement: 
-- Securities Master Database
-- Trading Strategies
-- Portfolio and Order Management 
-- Risk and Position Management 
-- Execution Handling (both for backtesting and live trading) 
-- Performance and Reporting
-- Deployment & Monitoring (probably not an immediate focus) 
+- Data Acquisiton system
+- Portfolio tracking
+- Market order executions
+- Live trading deployment
+- GUI interface
+- Advanced Statistics
 
-Helpful Links: 
 
-QuantStart - Building Your Own Backtester
-https://www.quantstart.com/articles/Should-You-Build-Your-Own-Backtester/
+This project is being developed and maintained by Hal Owens and Carson Kurtz, two college students with interest 
+in technology finance and statistics
 
-Reddit Thread - Requirements for Backtesting System
-https://www.reddit.com/r/algotrading/comments/7surwp/building_automated_trading_system_from_scratch/?ref=share&ref_source=link
+####Contact Us
+Hal Owens - Purdue University - owens155@purdue.edu 
 
-Dependencies: Polygon.io Python, 
-
-Email to Contact Founder of Quant Start - Willing to Help 
-support@quantstart.com
-
+Carson Kurtz - Williams University - kurtzcarson@gmail.com

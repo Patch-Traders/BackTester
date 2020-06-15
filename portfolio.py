@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod #module providing infrastructure for abstrac
 from Events.OrderEvent import OrderEvent
 
 
-class Portfolio:
+class portfolio:
     """
     Abstract Base Class for Porfolio objects
 
