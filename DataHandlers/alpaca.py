@@ -4,10 +4,11 @@ import queue
 from Events.MarketEvent import MarketEvent
 from Events.Stock import Stock
 import alpaca_trade_api as tradeapi
-from DataHandlerABC import DataHandler
+from data_handler import DataHandler
+from nyse_holidays import NYSE_HOLIDAYS
 
 
-class Alpaca(DataHandler):
+class Alpaca(dataHandler):
     """"
     Retrieves equities data from Alpaca with the help of Polygon API
 

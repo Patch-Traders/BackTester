@@ -1,9 +1,7 @@
 from abc import ABC, abstractmethod #module providing infrastructure for abstract base class
 
 
-
-
-class DataHandler(ABC):
+class dataHandler(ABC):
     """
     Abstract Base Class to provide a framework for all data collection across all platforms
 
