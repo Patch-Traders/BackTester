@@ -17,4 +17,4 @@ in technology, finance and statistics
 #### Contact Us
 Hal Owens - Purdue University - owens155@purdue.edu 
 
-Carson Kurtz - Williams University - kurtzcarson@gmail.com
+Carson Kurtz - Williams College - kurtzcarson@gmail.com

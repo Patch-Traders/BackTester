@@ -1,7 +1,7 @@
 import datetime
 import alpaca_trade_api as tradeapi
 from AbstractClasses.data_handler import dataHandler
-from StockExchangeHolidays.nyse_holidays import NYSE_HOLIDAYS
+from Resources.nyse_holidays import NYSE_HOLIDAYS
 
 
 class Alpaca(dataHandler):
