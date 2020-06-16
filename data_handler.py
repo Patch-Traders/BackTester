@@ -8,6 +8,18 @@ class dataHandler(ABC):
     Output: Generates a container holding the specified number of bars for a ticker and time frame
     """
     @abstractmethod
+    def __init__(self, tickers: list, begin_date: str, end_date: str, bar_size: str, look_back: int):
+        """
+        Dates must be given in the ISO 8601 Format specification YYYY-MM-DD
+        :param tickers: list containing all stocks to be traded
+        :param begin_date: Date upon which trading will initiate
+        :param end_date: Date upon which trading will end
+        :param bar_size: minute, hour, day, week etc...
+        :param look_back: lookback period in days
+        """
+        raise NotImplementedError("Error: Implementation of the constructor is required")
+
+    @abstractmethod
     def get_initial_barset(self):
         """
         When implemented this method should retrieve a dataset of size lookback_length
