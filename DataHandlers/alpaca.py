@@ -83,6 +83,7 @@ class Alpaca(dataHandler):
         """
         Creates a new barset to simulate the acquistion of data from a real exchange
         :return: An np frame dataset that contains the data for the proper timeframe
+        #TODO make sure that we do not step outside of the datset
         """
         self.barset_offset += 1
         return self.__create_truncated_dict(self.__barset_offset)
