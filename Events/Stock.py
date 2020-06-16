@@ -15,28 +15,36 @@ class Stock:
         self.low = stock_data["l"]
         self.start = stock_data["t"]
         self.bars_passed = stock_data["n"]
-
+    
+    @property
     def name():
         return self.name
     
+    @property
     def volume():
         return self.volume
 
+    @property
     def open(): 
         return self.open
 
+    @property
     def close(): 
         return self.close
-
+    
+    @property
     def high():
         return self.high
 
+    @property
     def low(): 
         return self.low
 
+    @property
     def start():
         return self.start
 
+    @property 
     def bars_passed():
         return self.bars_passed
 
