@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod #module providing infrastructure for abstract base class
+from abc import ABC, abstractmethod  # module providing infrastructure for abstract base class
 
 
 class dataHandler(ABC):
@@ -7,6 +7,7 @@ class dataHandler(ABC):
 
     Output: Generates a container holding the specified number of bars for a ticker and time frame
     """
+
     @abstractmethod
     def __init__(self, tickers: list, begin_date: str, end_date: str, bar_size: str, look_back: int):
         """
@@ -30,10 +31,10 @@ class dataHandler(ABC):
     """
     Retrieves the latest bar from specified database to add to bar container
     """
+
     @abstractmethod
     def update_barset(self):
         """
         When implemented this method should push the latest bar to the relevant ticker's data structure
         """
         raise NotImplementedError("Error: Implementation for 'update_bars' is required")
-
