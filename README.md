@@ -12,7 +12,7 @@ Need to Implement:
 
 
 This project is being developed and maintained by Hal Owens and Carson Kurtz, two college students with interest 
-in technology finance and statistics
+in technology, finance and statistics
 
 #### Contact Us
 Hal Owens - Purdue University - owens155@purdue.edu 
