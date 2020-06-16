@@ -11,7 +11,7 @@ Need to Implement:
 - Advanced Statistics
 
 
-This project is being developed and maintained by Hal Owens and Carson Kurtz, two college students with interest 
+This project is being developed and maintained by Hal Owens and Carson Kurtz, two college students with interests 
 in technology, finance and statistics
 
 #### Contact Us
