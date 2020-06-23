@@ -85,6 +85,10 @@ class Alpaca(dataHandler):
         Creates a new barset to simulate the acquistion of data from a real exchange
         :return: A pandas Dataframe that contains the data for the proper timeframe
         """
+        # TODO Make this work for time periods that arent a day
+        # Either scale lookback if the user will always provide lookback in terms of days
+        # Or make lookback be in the unit of barsize which would require no change
+        # TODO Does a distinction need to be made when a new day appears for barsizes < day
         # Only continue dripfeeding data if there is data to feed
         if self.__barset_offset + self.__look_back < len(self.__full_barset[self.__tickers[0]]):
             self.__barset_offset += 1
