@@ -1,31 +1,34 @@
 from abc import ABC, abstractmethod #module providing infrastructure for abstract base class
-from Events.OrderEvent import OrderEvent
 
 
-class portfolio:
+class portfolio(ABC):
     """
-    Abstract Base Class for Porfolio objects
-
-    Functionality:
+    Abstract Base Class for Portfolio objects
     """
+
     @abstractmethod
-    def buy(self, order_event: OrderEvent):
+    def __init__(self, tickers:list, cash: int):
+        """
+        :param cash: initial amount of tradeable cash
+        """
+        raise NotImplementedError("Error: Implementation of the constructor is required")
+
+    @abstractmethod
+    def buy(self, date:str, ticker: str, quantity: int, price:int):
         """
         Executes a buy order and changes portfolio holdings.
-        During live trading the data in the FillEvent will accurately represent 
-        asset price at sell
-        :param order_event: Event object that contains order information
+        :param ticker: ticker symbol
+        :param quantity: quantity to be traded
         """
         raise NotImplementedError("Error: Implementation for 'buy' is required")
 
 
     @abstractmethod
-    def sell(self, order_event: OrderEvent):
+    def sell(self, date:str, ticker: str, quantity: int, price:int):
         """
         Executes a sell order and changes portfolio holdings
-        During live trading the data in the FillEvent will accurately represent 
-        asset price at sell
-        :param order_event: Event object that contains order information
+        :param ticker: ticker symbol
+        :param quantity: quantity to be traded
         """
         raise NotImplementedError("Error: Implementation for 'sell' is required")
 
@@ -45,6 +48,12 @@ class portfolio:
         """
         raise NotImplementedError("Error: Implementation for 'marketValue' is required")
 
+    @abstractmethod
+    def update_market_value(self, daily_data:dict):
+        """
+        Updates the market value of the portfolio
+        """
+        pass
 
     @abstractmethod
     def net_return(self):
@@ -55,19 +64,16 @@ class portfolio:
 
 
     @abstractmethod
-    def liquidity(self):
+    def cash(self):
         """
         Should return liquidity
         """
         raise NotImplementedError("Error: Implementation for 'liquidity' is required")
 
-    
+
     @abstractmethod
     def leverage(self):
         """
         Should return leverage
         """
         raise NotImplementedError("Error: Implementation for 'leverage' is required")
-
-
-
