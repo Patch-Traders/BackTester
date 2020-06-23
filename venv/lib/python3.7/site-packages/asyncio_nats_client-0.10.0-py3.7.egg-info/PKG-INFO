@@ -1,0 +1,17 @@
+Metadata-Version: 2.1
+Name: asyncio-nats-client
+Version: 0.10.0
+Summary: NATS client for Python Asyncio
+Home-page: https://github.com/nats-io/nats.py
+Author: Waldemar Quevedo
+Author-email: wally@synadia.com
+License: Apache 2 License
+Description: Asyncio based Python client for NATS, a lightweight, high-performance cloud native messaging system
+Platform: UNKNOWN
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Provides-Extra: nkeys
