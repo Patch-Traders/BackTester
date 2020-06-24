@@ -53,21 +53,25 @@ class Alpaca(dataHandler):
         Truncates the full dataset
         :return truncated_data: Dataset that is truncated over the proper time period
         """
-        truncated_data = dict()
+        lookback_data = dict()
+        days_data = dict()
         for ticker in self.__full_barset:
-            truncated_data[ticker] = self.__full_barset[ticker][offset:self.__look_back + offset]
-        return truncated_data
+            lookback_data[ticker] = self.__full_barset[ticker][offset:self.__look_back + offset]
+            days_data[ticker] = self.__full_barset[ticker].iloc[self.__look_back + offset - 1]
+        return [lookback_data, days_data]
 
     def __get_full_barset(self):
         """
         Grabs the full dataset from the alpaca web api
-        #TODO Need to deal with the data size limit imposed by api.polygon.historic_agg_v2
+        # TODO Need to deal with the data size limit imposed by api.polygon.historic_agg_v2
+        # TODO investigate the exclusive nature of the alpaaca API end date
         currently only 3000 data points can be retrieved
         """
         for ticker in self.__tickers:
             self.__full_barset[ticker] = self.__api.polygon.historic_agg_v2(ticker, 1, self.__bar_size,
                                                                             _from=self.__begin_date.isoformat(),
                                                                             to=self.__end_date.isoformat()).df
+        print(self.__full_barset)
 
     def get_initial_barset(self):
         """
