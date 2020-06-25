@@ -53,13 +53,17 @@ class backTesting(eventLoop):
 
     def loop(self):
         """
-        This function should begin and then manage the event loop
+        Manages the trading execution loop
         """
 
         data_array = self.alpaca.get_initial_barset()
-        # print(data_array['AAPL'].iloc[:,0])
         while data_array != 0:
 
-            # self.__portfolio.update_market_value(data_set, 'open')
+            # updates market value for risk management
+            self.__portfolio.update_market_value(data_array[1], 'close')
+
+            # trades with look back and daily data
             self.__trade(data_array[0], data_array[1])
+
+            # updates look back and daily data for next iteration
             data_array = self.alpaca.update_barset()

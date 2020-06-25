@@ -1,18 +1,14 @@
 from AbstractClasses.portfolio import portfolio
 import random
 import pandas as pd
-import numpy as np
 
 class myPortfolio(portfolio):
     """
     # TODO should we execute OrderEvents (will probably help in the long run)
-    # TODO make sure in backtesting_loop to update the portfolio after every loop with the current pricings
-    # TODO update portfolio value at the beginning of the day and then initiate buy orders immediately afterwards
     """
 
     def __init__(self, tickers:list, cash:int):
         """
-        #TODO consider other parameters that are useful for initialization
         :param cash: initial amount of tradeable cash
         """
         self.__tickers = tickers
@@ -20,10 +16,10 @@ class myPortfolio(portfolio):
         self.__original_value = cash
         self.__market_value = cash
         self.__slippage = .02
-        self.__order_log = dict() #TODO is a dictionary the best data structure / implement
+        self.__order_log = dict()
         self.__current_holdings = dict()
 
-        # initialize all holdings as zero
+        # initialize all holdingsclear and the order log
         for ticker in self.__tickers:
             self.__current_holdings[ticker]= {'quantity': 0, 'value': 0}
             self.__order_log[ticker] = pd.DataFrame(columns=[
@@ -82,6 +78,7 @@ class myPortfolio(portfolio):
         Estimates the actual execution price of a transaction based on a static slippage factor of .02
         :param price: price of security transacted
         """
+
         min_price = price - (price * self.__slippage)
         max_price = price + (price * self.__slippage)
 
@@ -89,18 +86,25 @@ class myPortfolio(portfolio):
 
         return execution_price
 
-    def __update_order_log(self, ticker:str, time_stamp:str, execution_price:float, quantity:int, action:str):
+    def __update_order_log(self, ticker:str, time_stamp:str, execution_price:float, quantity:int, action:str) -> None:
         """
-        Updates order self.__order_log for evaluating portfolio performance
-        :return: None
+        Updates the order log for all orders executed in the portfolio
+        :param ticker: ticker symbol
+        :param time_stamp: time of trade
+        :param execution_price: price of order execution
+        :param quantity: quantity of security traded
+        :param action: e.g buy, sell, short
         """
-        # new_entry = {'action':action, 'quantity':quantity, 'execution_price':execution_price, 'order_value': quantity*execution_price}
+
         new_entry = [action, quantity, execution_price, quantity*execution_price]
         self.__order_log[ticker].loc[pd.to_datetime(time_stamp)] = new_entry
 
 
     @property
-    def order_log(self):
+    def order_log(self) -> dict:
+        """
+        Getter for giving the trader the order log
+        """
         return self.__order_log
 
     def update_market_value(self, daily_data: dict, day_time: str) -> int:
@@ -111,7 +115,7 @@ class myPortfolio(portfolio):
         """
         self.__market_value = 0
         for ticker in self.__tickers:
-            new_price = daily_data[ticker].iloc[-1][day_time]
+            new_price = daily_data[ticker][day_time]
             quantity = self.__current_holdings[ticker]['quantity']
 
             self.__current_holdings[ticker]['value'] = new_price * quantity
@@ -126,21 +130,21 @@ class myPortfolio(portfolio):
         return returns
 
     @property
-    def cash(self):
+    def cash(self) -> int:
         """
         Should return liquidity
         """
         return self.__cash
 
     @property
-    def current_holdings(self):
+    def current_holdings(self) -> dict:
         """
         Should return current holdings
         """
         return self.__current_holdings
 
     @property
-    def market_value(self):
+    def market_value(self) -> float:
         """
         Returns market value of the portfolio
         """

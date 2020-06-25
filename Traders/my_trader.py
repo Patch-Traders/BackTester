@@ -16,11 +16,10 @@ class myTrader(trader):
         :return:
         """
 
+        # basic trading strategy for testing
         if (self.__portfolio.cash >=  day_data['AAPL']['close']):
             self.__portfolio.buy(day_data['AAPL'].name, 'AAPL', 1, day_data['AAPL']['close'])
 
-        # print("Lookback Data: ", lookback_data)
-        # print("\nDay_Data: ", day_data)
 
     def define_settings(self, settings):
         """
@@ -40,7 +39,10 @@ class myTrader(trader):
 
 
 if __name__ == '__main__':
-    portfolio = myPortfolio(['AAPL', 'MSFT'], 1000)
+
+    # initialization for running the trader
+    portfolio = myPortfolio(['AAPL'], 1000)
     trader = myTrader(portfolio)
     backTesting(trader)
-    print(portfolio.order_log)
+
+    print('Order Log: \n', portfolio.order_log)
