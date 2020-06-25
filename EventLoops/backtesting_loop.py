@@ -42,7 +42,7 @@ class backTesting(eventLoop):
         Calls the settings function passing to it the settings dictionary where the user can set the settings
         """
         self.__settings = self.__define_settings(self.__settings)
-        if self.__settings["LookBack"] <= 0:
+        if self.__settings["LookBack"] < 1:
             raise ValueError("LookBack can not be less than 1")
         if self.__settings['Cash'] <= 0:
             raise ValueError("Minimum Cash is 1")
@@ -56,10 +56,10 @@ class backTesting(eventLoop):
         This function should begin and then manage the event loop
         """
 
-        data_set = self.alpaca.get_initial_barset()
-        print(data_set['AAPL'].iloc[:,0])
-        while data_set != 0:
+        data_array = self.alpaca.get_initial_barset()
+        # print(data_array['AAPL'].iloc[:,0])
+        while data_array != 0:
 
-            self.__portfolio.update_market_value(data_set, 'open')
-            self.__trade(data_set)
-            data_set = self.alpaca.update_barset()
+            # self.__portfolio.update_market_value(data_set, 'open')
+            self.__trade(data_array[0], data_array[1])
+            data_array = self.alpaca.update_barset()

@@ -1,5 +1,7 @@
 from AbstractClasses.portfolio import portfolio
 import random
+import pandas as pd
+import numpy as np
 
 class myPortfolio(portfolio):
     """
@@ -24,9 +26,12 @@ class myPortfolio(portfolio):
         # initialize all holdings as zero
         for ticker in self.__tickers:
             self.__current_holdings[ticker]= {'quantity': 0, 'value': 0}
+            self.__order_log[ticker] = pd.DataFrame(columns=[
+                'action','quantity','execution_price','order_value'])
 
 
-    def buy(self, date:str, ticker:str, quantity:int, price:int):
+    # TODO consider making all order methods take dataframe of data to simply implementation of strategy
+    def buy(self, time_stamp:str, ticker:str, quantity:int, price:int) -> None:
         """
         Executes a buy order and changes portfolio holdings. Only executed at the beginning of the day.
         :param data: given in the ISO 8601 Format specification YYYY-MM-DD
@@ -46,9 +51,10 @@ class myPortfolio(portfolio):
 
         self.__market_value += buy_value
         self.__cash -= buy_value
+        self.__update_order_log(ticker, time_stamp, execution_price, quantity, 'buy')
 
 
-    def sell(self, date:str, ticker:str, quantity:int, price:int):
+    def sell(self, time_stamp:str, ticker:str, quantity:int, price:int) -> None:
         """
         Executes a sell order and changes portfolio holdings. Only executed at the beginning of the day.
         :param data: given in the ISO 8601 Format specification YYYY-MM-DD
@@ -69,8 +75,9 @@ class myPortfolio(portfolio):
 
         self.__market_value -= sell_value
         self.__cash += sell_value
+        self.__update_order_log(ticker, time_stamp, execution_price, quantity, 'sell')
 
-    def __execution_price(self, price: int) -> dict:
+    def __execution_price(self, price: int) -> float:
         """
         Estimates the actual execution price of a transaction based on a static slippage factor of .02
         :param price: price of security transacted
@@ -81,6 +88,20 @@ class myPortfolio(portfolio):
         execution_price = random.uniform(min_price, max_price)
 
         return execution_price
+
+    def __update_order_log(self, ticker:str, time_stamp:str, execution_price:float, quantity:int, action:str):
+        """
+        Updates order self.__order_log for evaluating portfolio performance
+        :return: None
+        """
+        # new_entry = {'action':action, 'quantity':quantity, 'execution_price':execution_price, 'order_value': quantity*execution_price}
+        new_entry = [action, quantity, execution_price, quantity*execution_price]
+        self.__order_log[ticker].loc[pd.to_datetime(time_stamp)] = new_entry
+
+
+    @property
+    def order_log(self):
+        return self.__order_log
 
     def update_market_value(self, daily_data: dict, day_time: str) -> int:
         """
@@ -134,5 +155,14 @@ class myPortfolio(portfolio):
     def leverage(self):
         """
         Returns leverage
+        """
+        pass
+
+    def plot_performance(self):
+        """
+        Need to plot holding_history
+        Dictionary where each ticker is aligned with a dataframe
+        Row/Index: timestamp
+        Columns: quantity, order_price, total_value
         """
         pass

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="33c91d9a-f598-4c77-a892-fde9b952f66b" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ProjectId" id="1djm4Rpp6HPjB5cvBKd1hPDEXmr" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="restartRequiresConfirmation" value="false" />
+  </component>
+  <component name="RunManager" selected="Python.my_trader">
+    <configuration name="alpaca" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="BackTester" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="APCA_API_KEY_ID" value="PKEQP55SFAQOVHHIY042" />
+        <env name="APCA_API_SECRET_KEY" value="O0pK9tJwqk9VzkJzj7et/qCafJ6ZPB9spMYxKicS" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/DataHandlers" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/DataHandlers/alpaca.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="my_trader" type="PythonConfigurationType" factoryName="Python">
+      <module name="BackTester" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="APCA_API_KEY_ID" value="PKEQP55SFAQOVHHIY042" />
+        <env name="APCA_API_SECRET_KEY" value="O0pK9tJwqk9VzkJzj7et/qCafJ6ZPB9spMYxKicS" />
+      </envs>
+      <option name="SDK_HOME" value="/usr/bin/python3.8" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Traders/my_trader.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.my_trader" />
+      <item itemvalue="Python.alpaca" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.alpaca" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="33c91d9a-f598-4c77-a892-fde9b952f66b" name="Default Changelist" comment="" />
+      <created>1592946685148</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1592946685148</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="350" y="260" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1593029878633">
+      <screen x="67" y="27" width="1433" height="972" />
+    </state>
+    <state x="350" y="260" key="#com.intellij.execution.impl.EditConfigurationsDialog/67.27.1433.972@67.27.1433.972" timestamp="1593029878633" />
+    <state x="959" y="488" width="308" height="530" key="EnvironmentVariablesDialog" timestamp="1592947200469">
+      <screen x="67" y="27" width="1433" height="972" />
+    </state>
+    <state x="959" y="488" width="308" height="530" key="EnvironmentVariablesDialog/67.27.1433.972@67.27.1433.972" timestamp="1592947200469" />
+    <state width="1410" height="249" key="GridCell.Tab.0.bottom" timestamp="1593054941159">
+      <screen x="67" y="27" width="1433" height="972" />
+    </state>
+    <state width="1410" height="249" key="GridCell.Tab.0.bottom/67.27.1433.972@67.27.1433.972" timestamp="1593054941159" />
+    <state width="1410" height="249" key="GridCell.Tab.0.center" timestamp="1593054941155">
+      <screen x="67" y="27" width="1433" height="972" />
+    </state>
+    <state width="1410" height="249" key="GridCell.Tab.0.center/67.27.1433.972@67.27.1433.972" timestamp="1593054941155" />
+    <state width="1410" height="249" key="GridCell.Tab.0.left" timestamp="1593054941153">
+      <screen x="67" y="27" width="1433" height="972" />
+    </state>
+    <state width="1410" height="249" key="GridCell.Tab.0.left/67.27.1433.972@67.27.1433.972" timestamp="1593054941153" />
+    <state width="1410" height="249" key="GridCell.Tab.0.right" timestamp="1593054941157">
+      <screen x="67" y="27" width="1433" height="972" />
+    </state>
+    <state width="1410" height="249" key="GridCell.Tab.0.right/67.27.1433.972@67.27.1433.972" timestamp="1593054941157" />
+  </component>
+</project>
