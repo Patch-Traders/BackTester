@@ -71,7 +71,6 @@ class Alpaca(dataHandler):
             self.__full_barset[ticker] = self.__api.polygon.historic_agg_v2(ticker, 1, self.__bar_size,
                                                                             _from=self.__begin_date.isoformat(),
                                                                             to=self.__end_date.isoformat()).df
-        print(self.__full_barset)
 
     def get_initial_barset(self):
         """
