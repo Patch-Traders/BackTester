@@ -1,6 +1,4 @@
-from AbstractClasses.trader import trader
-from Portfolios.my_portfolio import myPortfolio
-from EventLoops.backtesting_loop import backTesting
+import patch_quant
 
 
 class myTrader(trader):
@@ -19,7 +17,6 @@ class myTrader(trader):
         # basic trading strategy for testing
         if (self.__portfolio.cash >=  day_data['AAPL']['close']):
             self.__portfolio.buy(day_data['AAPL'].name, 'AAPL', 1, day_data['AAPL']['close'])
-
 
     def define_settings(self, settings):
         """
