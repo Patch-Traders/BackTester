@@ -2,6 +2,7 @@ from AbstractClasses.trader import trader
 from Portfolios.my_portfolio import myPortfolio
 from EventLoops.backtesting_loop import backTesting
 
+
 class myTrader(trader):
     def __init__(self, portfolio: myPortfolio):
         self.__global_vars = dict()
@@ -12,7 +13,6 @@ class myTrader(trader):
         """
         Test trading function
         :param data_set: Data set for each stock
-        :param global_vars: dictionary that allows for passing of variables between function calls
         :return:
         """
 
