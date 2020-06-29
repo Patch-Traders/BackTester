@@ -1,4 +1,4 @@
-from patch_quant.patch_quant import pq
+from patch_quant.patch_quant import patchQuant as pq
 # TODO figure out how to properly organize a package
 # The way it is right now feels hacky
 
@@ -11,6 +11,7 @@ class myTrader():
         :return:
         """
         # basic trading strategy for testing
+        pq.open_long('AAPL', 1)
         print(lookback_data)
 
     def define_settings(self, settings):

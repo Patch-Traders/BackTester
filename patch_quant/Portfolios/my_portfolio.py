@@ -17,7 +17,7 @@ class myPortfolio(portfolio):
         self.__market_value = cash
         self.__slippage = slippage
         self.__order_log = dict()
-        self.__current_holdings = dict()
+        self.__current_longs = dict()
         for ticker in self.__tickers:
             self.__current_longs[ticker]= {'quantity': 0, 'value': 0}
             #self.__current_shorts[ticker]= {'quantity': 0, 'value': 0}
@@ -36,19 +36,18 @@ class myPortfolio(portfolio):
         """
         if  self.__cash < price*quantity:
             raise Exception('Error: There is not enough cash in portfolio to execute your trade')
-        if ticker not in self.__current_holdings:
+        if ticker not in self.__current_longs:
             raise Exception(f'Error: {ticker} is an invalid ticker symbol')
 
         execution_price = self.__execution_price(price)
 
         buy_value = quantity*execution_price
-        self.__current_holdings[ticker]['quantity'] += quantity
-        self.__current_holdings[ticker]['value'] += buy_value
+        self.__current_longs[ticker]['quantity'] += quantity
+        self.__current_longs[ticker]['value'] += buy_value
 
         self.__market_value += buy_value
         self.__cash -= buy_value
         self.__update_order_log(ticker, time_stamp, execution_price, quantity, 'buy')
-
 
     def close_long(self, time_stamp:str, ticker:str, quantity:int, price:int) -> None:
         """
@@ -58,16 +57,16 @@ class myPortfolio(portfolio):
         :param quantity: quantity to be traded
         :param price: execution price of order
         """
-        if ticker not in self.__current_holdings:
+        if ticker not in self.__current_longs:
             raise Exception(f'Error: {ticker} is an invalid ticker symbol')
-        if self.__current_holdings[ticker]['quantity'] < quantity:
+        if self.__current_longs[ticker]['quantity'] < quantity:
             raise Exception(f'Error: You do not have enough shares of {ticker}')
 
         execution_price = self.__execution_price(price)
 
         sell_value = quantity*execution_price
-        self.__current_holdings[ticker]['quantity'] -= quantity
-        self.__current_holdings[ticker]['value'] -= sell_value
+        self.__current_longs[ticker]['quantity'] -= quantity
+        self.__current_longs[ticker]['value'] -= sell_value
 
         self.__market_value -= sell_value
         self.__cash += sell_value
@@ -132,9 +131,9 @@ class myPortfolio(portfolio):
         self.__market_value = 0
         for ticker in self.__tickers:
             new_price = daily_data[ticker][day_time]
-            quantity = self.__current_holdings[ticker]['quantity']
+            quantity = self.__current_longs[ticker]['quantity']
 
-            self.__current_holdings[ticker]['value'] = new_price * quantity
+            self.__current_longs[ticker]['value'] = new_price * quantity
             self.__market_value += new_price * quantity
 
     def net_return(self) -> int:
@@ -156,7 +155,7 @@ class myPortfolio(portfolio):
         """
         Should return current holdings
         """
-        return self.__current_holdings
+        return self.__current_longs
 
     @property
     def market_value(self) -> float:
