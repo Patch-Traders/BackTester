@@ -3,6 +3,7 @@ from Portfolios.my_portfolio import myPortfolio
 from EventLoops.backtesting_loop import backTesting
 
 class myTrader(trader):
+
     def __init__(self, portfolio: myPortfolio):
         self.__global_vars = dict()
         self.__portfolio = portfolio
