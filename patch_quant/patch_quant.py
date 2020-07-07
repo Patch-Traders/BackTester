@@ -1,7 +1,6 @@
-from patch_quant.DataHandlers.alpaca import Alpaca
 from patch_quant.EventLoops.backtesting_loop import backTesting
 from patch_quant.Portfolios.my_portfolio import myPortfolio
-from patch_quant.AbstractClasses.trader import trader
+import plotly.graph_objects as go
 
 """
 ##########################################
@@ -17,6 +16,7 @@ class __patchQuant():
         self.__portfolio = None
         self.__settings = None
         self.__back_tester = None
+        self.__full_data_set = None
 
     def open_long(self, ticker: str, quantity: int) -> None:
         """
@@ -54,18 +54,84 @@ class __patchQuant():
         :param quantity: quantity to be traded
         """
 
-    def begin(self, trader_class) -> None:
+    def candlestick(self, start_date:str, end_date:str, *tickers):
         """
-        Function that begins backtesting
+        Creates candlestick plot for each ticker symbol in the specified time period
+        Dates must be given in the ISO 8601 Format specification YYYY-MM-DD
+
+        :param tickers: variable length parameter of tickers to visualize
+        :param start_date: starting data of graph
+        :param end_date: ending date of graph
+        """
+
+        for ticker in tickers:
+            stock = self.__full_data_set[ticker].loc[start_date:end_date]
+            fig = go.Figure(data=[go.Candlestick(
+                x = stock.index,
+                open = stock['open'],
+                high = stock['high'],
+                low = stock['low'],
+                close = stock['close'],
+            )])
+
+            fig.update_layout(
+                title = ticker,
+                yaxis_title = 'Price'
+            )
+
+            fig.show()
+
+    def timeseries(self, start_date:str, end_date:str, *tickers):
+        """
+        Creates timeseries plot for each ticker symbol in the specified time period
+        Dates must be given in the ISO 8601 Format specification YYYY-MM-DD
+
+        :param tickers: variable length parameter of tickers to visualize
+        :param start_date: starting data of graph
+        :param end_date: ending date of graph
+        """
+
+        for ticker in tickers:
+
+            stock = self.__full_data_set[ticker].loc[start_date:end_date]
+            fig = go.Figure(data=[go.Scatter(
+                x = stock.index,
+                y = stock['high']
+            )])
+
+            fig.update_layout(
+                title=ticker,
+                yaxis_title='High Price',
+            )
+
+            fig.show()
+
+    def initialize(self, trader_class) -> None:
+        """
+        Pulls trading data specified by trading settings and
+        prepares portfolio based on trading settings
         :param trader_class: This is the class that must be implemented by the user
         """
-        trader_object = trader_class()
-        self.__back_tester = backTesting(trader_object)
+
+        # initializes backtester and specified settings
+        self.__back_tester = backTesting(trader_class())
         self.__back_tester.manage_settings()
         self.__settings = self.__back_tester.settings
+
+        # initializes a portfolio for the backtester to utilize
         self.__portfolio = myPortfolio(self.__settings['Tickers'], self.__settings['Cash'], self.__settings['Slippage'])
         self.__back_tester.set_portfolio(self.__portfolio)
-        self.__back_tester.loop()
 
+        # retrieves full data set for graphing
+        self.__full_data_set = self.__back_tester.full_data_set
+
+
+
+    def begin(self) -> None:
+        """
+        Begins looping through trading strategy
+        :param trader_class: This is the class that must be implemented by the user
+        """
+        self.__back_tester.loop()
 
 patchQuant = __patchQuant()

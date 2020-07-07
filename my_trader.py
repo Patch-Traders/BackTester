@@ -4,6 +4,7 @@ from patch_quant.patch_quant import patchQuant as pq
 
 
 class myTrader():
+
     def trade(self, lookback_data: dict, day_data:dict):
         """
         Test trading function
@@ -11,8 +12,13 @@ class myTrader():
         :return:
         """
         # basic trading strategy for testing
-        pq.open_long('AAPL', 1)
-        print(lookback_data)
+
+        # pq.open_long('AAPL', 1)
+
+        try:
+            pq.open_long('AAPL', 1)
+        except:
+            exit('Ran out of cash')
 
     def define_settings(self, settings):
         """
@@ -28,7 +34,7 @@ class myTrader():
 
         return settings
 
-
-
 if __name__ == '__main__':
-    pq.begin(myTrader)
+    pq.initialize(myTrader)
+    pq.timeseries('2019-01-01', '2019-01-30', 'AAPL')
+    # pq.begin()

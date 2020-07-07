@@ -73,6 +73,10 @@ class backTesting(eventLoop):
         self.__portfolio = portfolio
 
     @property
+    def full_data_set(self):
+        return self.__alpaca.get_full_barset
+
+    @property
     def settings(self):
         return self.__settings
 

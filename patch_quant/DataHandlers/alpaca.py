@@ -1,6 +1,5 @@
 import datetime
 import alpaca_trade_api as tradeapi
-import plotly.graph_objects as go
 from patch_quant.AbstractClasses.data_handler import dataHandler
 from patch_quant.Resources.nyse_holidays import NYSE_HOLIDAYS
 
@@ -29,7 +28,9 @@ class Alpaca(dataHandler):
         self.__bar_size = bar_size
         self.__look_back = look_back
         self.__barset_offset = 0  # Tracks the amount of times update date is being called
-        self.__full_barset = dict()
+        self.__full_barset = self.__get_full_barset()
+
+
 
     def __correct_begin_date(self):
         """
@@ -68,10 +69,13 @@ class Alpaca(dataHandler):
         # TODO investigate the exclusive nature of the alpaaca API end date
         currently only 3000 data points can be retrieved
         """
+        full_bar_set = dict()
         for ticker in self.__tickers:
-            self.__full_barset[ticker] = self.__api.polygon.historic_agg_v2(ticker, 1, self.__bar_size,
+            full_bar_set[ticker] = self.__api.polygon.historic_agg_v2(ticker, 1, self.__bar_size,
                                                                             _from=self.__begin_date.isoformat(),
                                                                             to=self.__end_date.isoformat()).df
+
+        return full_bar_set
 
     def get_initial_barset(self):
         """
@@ -81,7 +85,6 @@ class Alpaca(dataHandler):
         :return The initial dateset that goes up to the day before begin_date
         """
         self.__correct_begin_date()
-        self.__get_full_barset()
         return self.__create_truncated_dict(0)
 
     def update_barset(self):
@@ -101,64 +104,7 @@ class Alpaca(dataHandler):
             # This is the signal for the event loop to know that the trading period has ended
             return 0
 
+    @property
+    def get_full_barset(self):
+        return self.__full_barset
 
-    def candlestick(self, start_date:str, end_date:str, *tickers):
-        """
-        Creates candlestick plot for each ticker symbol in the specified time period
-        Dates must be given in the ISO 8601 Format specification YYYY-MM-DD
-
-        :param tickers: variable length parameter of tickers to visualize
-        :param start_date: starting data of graph
-        :param end_date: ending date of graph
-        """
-
-        for ticker in tickers:
-            stock = self.__full_barset[ticker].loc[start_date:end_date]
-            fig = go.Figure(data=[go.Candlestick(
-                x = stock.index,
-                open = stock['open'],
-                high = stock['high'],
-                low = stock['low'],
-                close = stock['close'],
-            )])
-
-            fig.update_layout(
-                title = ticker,
-                yaxis_title = 'Price'
-            )
-
-            fig.show()
-
-    def timeseries(self, start_date:str, end_date:str, *tickers):
-        """
-        Creates timeseries plot for each ticker symbol in the specified time period
-        Dates must be given in the ISO 8601 Format specification YYYY-MM-DD
-
-        :param tickers: variable length parameter of tickers to visualize
-        :param start_date: starting data of graph
-        :param end_date: ending date of graph
-        """
-
-        for ticker in tickers:
-            stock = self.__full_barset[ticker].loc[start_date:end_date]
-            fig = go.Figure(data=[go.Scatter(
-                x = stock.index,
-                y = stock['high']
-            )])
-
-            fig.update_layout(
-                title=ticker,
-                yaxis_title='High Price',
-            )
-
-            fig.show()
-
-
-
-if __name__ == '__main__':
-    print("Hello")
-
-    data = Alpaca(['AAPL', 'TSLA'], "2019-01-01", "2020-07-05", 'day', 10)
-    data.get_initial_barset()
-    data.candlestick('2019-01-01',  '2019-12-01', 'TSLA')
-    data.timeseries('2019-01-01',  '2019-12-01', 'TSLA')
