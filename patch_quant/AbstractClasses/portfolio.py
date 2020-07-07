@@ -14,9 +14,9 @@ class portfolio(ABC):
         raise NotImplementedError("Error: Implementation of the constructor is required")
 
     @abstractmethod
-    def buy(self, date:str, ticker: str, quantity: int, price:int) -> None:
+    def open_long(self, ticker: str, quantity: int) -> None:
         """
-        Executes a buy order and changes portfolio holdings.
+        Opens a quantity of long positions on a specific symbol
         :param ticker: ticker symbol
         :param quantity: quantity to be traded
         """
@@ -24,9 +24,28 @@ class portfolio(ABC):
 
 
     @abstractmethod
-    def sell(self, date:str, ticker: str, quantity: int, price:int) -> None:
+    def close_long(self, ticker: str, quantity:int) -> None:
         """
-        Executes a sell order and changes portfolio holdings
+        Closes a quantity of long positions on a specific symbol
+        :param ticker: ticker symbol
+        :param quantity: quantity to be traded
+        """
+        raise NotImplementedError("Error: Implementation for 'sell' is required")
+
+    @abstractmethod
+    def open_short(self, ticker: str, quantity: int) -> None:
+        """
+        Opens a quantity of short positions on a specific symbol
+        :param ticker: ticker symbol
+        :param quantity: quantity to be traded
+        """
+        raise NotImplementedError("Error: Implementation for 'buy' is required")
+
+
+    @abstractmethod
+    def close_short(self, ticker: str, quantity:int) -> None:
+        """
+        Closes a quantity of short positions on a specific symbol
         :param ticker: ticker symbol
         :param quantity: quantity to be traded
         """

@@ -1,8 +1,8 @@
 import datetime
 import alpaca_trade_api as tradeapi
 import plotly.graph_objects as go
-from AbstractClasses.data_handler import dataHandler
-from Resources.nyse_holidays import NYSE_HOLIDAYS
+from patch_quant.AbstractClasses.data_handler import dataHandler
+from patch_quant.Resources.nyse_holidays import NYSE_HOLIDAYS
 
 
 class Alpaca(dataHandler):
