@@ -1,5 +1,6 @@
 import datetime
 import alpaca_trade_api as tradeapi
+import plotly.graph_objects as go
 from AbstractClasses.data_handler import dataHandler
 from Resources.nyse_holidays import NYSE_HOLIDAYS
 
@@ -99,3 +100,65 @@ class Alpaca(dataHandler):
         else:
             # This is the signal for the event loop to know that the trading period has ended
             return 0
+
+
+    def candlestick(self, start_date:str, end_date:str, *tickers):
+        """
+        Creates candlestick plot for each ticker symbol in the specified time period
+        Dates must be given in the ISO 8601 Format specification YYYY-MM-DD
+
+        :param tickers: variable length parameter of tickers to visualize
+        :param start_date: starting data of graph
+        :param end_date: ending date of graph
+        """
+
+        for ticker in tickers:
+            stock = self.__full_barset[ticker].loc[start_date:end_date]
+            fig = go.Figure(data=[go.Candlestick(
+                x = stock.index,
+                open = stock['open'],
+                high = stock['high'],
+                low = stock['low'],
+                close = stock['close'],
+            )])
+
+            fig.update_layout(
+                title = ticker,
+                yaxis_title = 'Price'
+            )
+
+            fig.show()
+
+    def timeseries(self, start_date:str, end_date:str, *tickers):
+        """
+        Creates timeseries plot for each ticker symbol in the specified time period
+        Dates must be given in the ISO 8601 Format specification YYYY-MM-DD
+
+        :param tickers: variable length parameter of tickers to visualize
+        :param start_date: starting data of graph
+        :param end_date: ending date of graph
+        """
+
+        for ticker in tickers:
+            stock = self.__full_barset[ticker].loc[start_date:end_date]
+            fig = go.Figure(data=[go.Scatter(
+                x = stock.index,
+                y = stock['high']
+            )])
+
+            fig.update_layout(
+                title=ticker,
+                yaxis_title='High Price',
+            )
+
+            fig.show()
+
+
+
+if __name__ == '__main__':
+    print("Hello")
+
+    data = Alpaca(['AAPL', 'TSLA'], "2019-01-01", "2020-07-05", 'day', 10)
+    data.get_initial_barset()
+    data.candlestick('2019-01-01',  '2019-12-01', 'TSLA')
+    data.timeseries('2019-01-01',  '2019-12-01', 'TSLA')

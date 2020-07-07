@@ -129,6 +129,8 @@ class myPortfolio(portfolio):
         returns = ((self.__market_value + self.__cash)/self.__original_value) - 1
         return returns
 
+    def graph_performance(self, start_date=, end_date=):
+
     @property
     def cash(self) -> int:
         """
