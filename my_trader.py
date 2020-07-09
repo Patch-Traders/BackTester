@@ -11,9 +11,6 @@ class myTrader():
         :param data_set: Data set for each stock
         :return:
         """
-        # basic trading strategy for testing
-
-        # pq.open_long('AAPL', 1)
 
         try:
             pq.open_long('AAPL', 1)
@@ -26,8 +23,8 @@ class myTrader():
         """
         settings['LookBack'] = 5
         settings['BeginDate'] = '2019-01-01'
-        settings['EndDate'] = '2019-01-30'
-        settings['Cash'] = 1000
+        settings['EndDate'] = '2019-03-30'
+        settings['Cash'] = 100000
         settings['BarSize'] = 'day'
         settings['Tickers'] = ['AAPL']
         settings['Slippage'] = 0.2
@@ -36,5 +33,6 @@ class myTrader():
 
 if __name__ == '__main__':
     pq.initialize(myTrader)
-    pq.timeseries('2019-01-01', '2019-01-30', 'AAPL')
-    # pq.begin()
+    pq.begin()
+    pq.timeseries('2019-01-01', '2019-03-30', 'AAPL')
+    pq.portfolio_performance('2019-01-01', '2019-03-30')

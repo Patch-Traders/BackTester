@@ -1,6 +1,7 @@
 from patch_quant.AbstractClasses.portfolio import portfolio
 import random
 import pandas as pd
+import plotly.graph_objects as go
 
 class myPortfolio(portfolio):
     """
@@ -10,17 +11,28 @@ class myPortfolio(portfolio):
     def __init__(self, tickers: list, cash: int , slippage: float):
         """
         :param cash: initial amount of tradeable cash
+        "param slippage: slippage factor between 0 and 1
         """
+
+
         self.__tickers = tickers
-        self.__cash = cash
         self.__original_value = cash
-        self.__market_value = cash
         self.__slippage = slippage
+
+        # tracks market value and orders over time
+        self.__cash = cash
         self.__order_log = dict()
+        self.__market_value = cash
+        self.__market_value_log =  pd.DataFrame(columns = ['value'])
+
+        # tracking long and short positions
         self.__current_longs = dict()
+        self.__current_shorts = dict()
+
+        # initialize positions and order_log
         for ticker in self.__tickers:
             self.__current_longs[ticker]= {'quantity': 0, 'value': 0}
-            #self.__current_shorts[ticker]= {'quantity': 0, 'value': 0}
+            self.__current_shorts[ticker]= {'quantity': 0, 'value': 0}
             self.__order_log[ticker] = pd.DataFrame(columns=[
                 'action','quantity','execution_price','order_value'])
 
@@ -129,12 +141,17 @@ class myPortfolio(portfolio):
         :param day_time: e.g close or open
         """
         self.__market_value = 0
+        time_stamp = daily_data[self.__tickers[0]].name
         for ticker in self.__tickers:
             new_price = daily_data[ticker][day_time]
             quantity = self.__current_longs[ticker]['quantity']
 
             self.__current_longs[ticker]['value'] = new_price * quantity
             self.__market_value += new_price * quantity
+
+
+        # add new input for order log with time and values
+        self.__market_value_log.loc[pd.to_datetime(time_stamp)] = [self.__market_value + self.__cash]
 
     def net_return(self) -> int:
         """
@@ -143,7 +160,23 @@ class myPortfolio(portfolio):
         returns = ((self.__market_value + self.__cash)/self.__original_value) - 1
         return returns
 
-    # def graph_performance(self, start_date=, end_date=):
+    def graph_performance(self, start_date:str, end_date:str):
+
+        # time period trader wants to visualize portfolio performance over
+        sub_set = self.__market_value_log.loc[start_date:end_date]
+
+        # figure to make timeseries graph of portfolio performance
+        fig = go.Figure(data=[go.Scatter(
+            x = sub_set.index,
+            y = sub_set['value']
+        )])
+
+        fig.update_layout(
+            title='Portfolio Performance',
+            yaxis_title='Value'
+        )
+
+        fig.show()
 
     @property
     def cash(self) -> int:

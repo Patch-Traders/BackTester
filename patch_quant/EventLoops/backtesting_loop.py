@@ -10,13 +10,12 @@ class backTesting(eventLoop):
     def __init__(self, trader):
         """
         Initializes the object with the two functions that will be called within the event loop
-        :param loop_func: Function to be called on every loop
-        :param settings_func: Function that is called once for the user to create settings.
+        :param trader:
         """
 
         self.__trade = trader.trade
         self.__define_settings = trader.define_settings
-        self.__execution_day = 0
+        self.__execution_day = None
         self.__portfolio = None
         self.__alpaca = None
         self.__settings = dict()
@@ -57,6 +56,7 @@ class backTesting(eventLoop):
 
         data_array = self.__alpaca.get_initial_barset()
         while data_array != 0:
+
             # Get execution price pre slippage
             self.__execution_day = data_array[1]
 
@@ -68,6 +68,7 @@ class backTesting(eventLoop):
 
             # updates look back and daily data for next iteration
             data_array = self.__alpaca.update_barset()
+
 
     def set_portfolio(self, portfolio):
         self.__portfolio = portfolio
