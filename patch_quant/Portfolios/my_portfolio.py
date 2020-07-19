@@ -14,16 +14,16 @@ class myPortfolio(portfolio):
         "param slippage: slippage factor between 0 and 1
         """
 
-
         self.__tickers = tickers
         self.__original_value = cash
         self.__slippage = slippage
 
         # tracks market value and orders over time
         self.__cash = cash
+        self.__short_collateral = 0
         self.__order_log = dict()
         self.__market_value = cash
-        self.__market_value_log =  pd.DataFrame(columns = ['value'])
+        self.__returns_log =  pd.DataFrame(columns = ['value'])
 
         # tracking long and short positions
         self.__current_longs = dict()
@@ -31,8 +31,8 @@ class myPortfolio(portfolio):
 
         # initialize positions and order_log
         for ticker in self.__tickers:
-            self.__current_longs[ticker]= {'quantity': 0, 'value': 0}
-            self.__current_shorts[ticker]= {'quantity': 0, 'value': 0}
+            self.__current_longs[ticker]= {'quantity': 0, 'market_value': 0}
+            self.__current_shorts[ticker]= {}
             self.__order_log[ticker] = pd.DataFrame(columns=[
                 'action','quantity','execution_price','order_value'])
 
@@ -55,13 +55,13 @@ class myPortfolio(portfolio):
 
         buy_value = quantity*execution_price
         self.__current_longs[ticker]['quantity'] += quantity
-        self.__current_longs[ticker]['value'] += buy_value
+        self.__current_longs[ticker]['market_value'] += buy_value
 
         self.__market_value += buy_value
         self.__cash -= buy_value
-        self.__update_order_log(ticker, time_stamp, execution_price, quantity, 'buy')
+        self.__update_order_log(ticker, time_stamp, execution_price, quantity, 'open_long')
 
-    def close_long(self, time_stamp:str, ticker:str, quantity:int, price:int) -> None:
+    def close_long(self, time_stamp:str, ticker:str, quantity:int, price: float) -> None:
         """
         Closes a quantity of long positions on a specific symbol
         :param time_stamp: time stamp of order
@@ -78,26 +78,54 @@ class myPortfolio(portfolio):
 
         sell_value = quantity*execution_price
         self.__current_longs[ticker]['quantity'] -= quantity
-        self.__current_longs[ticker]['value'] -= sell_value
+        self.__current_longs[ticker]['market_value'] -= sell_value
 
         self.__market_value -= sell_value
         self.__cash += sell_value
-        self.__update_order_log(ticker, time_stamp, execution_price, quantity, 'sell')
+        self.__update_order_log(ticker, time_stamp, execution_price, quantity, 'close_long')
 
-    #TODO How can shorts be represented and calculated? Do you need to store the purchase price?
-    def open_short(self, ticker: str, quantity: int) -> None:
+    def open_short(self, time_stamp:str, ticker: str, quantity: int, price: float) -> None:
         """
         Opens a quantity of short positions on a specific symbol
         :param ticker: ticker symbol
         :param quantity: quantity to be traded
         """
-        raise NotImplementedError("Error: Implementation for 'buy' is required")
 
-    def close_short(self, ticker: str, quantity:int) -> None:
+        """
+        short_log = { ticker: { total_exposure: $, positions: { datetime: $ }
+        subtract daytime from current day to calculate shorting fee percentage
+        as trader incurs loses, we will decrease the cash_reserve to that amount (not allowing leverage yet)
+        
+        have cash from short, but not allowed to access it
+        subtract short value from cash
+        each day recalculate how much short value has changed (above or below price day of trade)) 
+        """
+
+        if  self.__cash < price*quantity:
+            raise Exception('Error: There is not enough cash in portfolio to be provided as collateral')
+        if ticker not in self.__current_longs:
+            raise Exception(f'Error: {ticker} is an invalid ticker symbol')
+
+        execution_price = self.__execution_price(price)
+        sell_short_value = quantity * execution_price
+
+        self.__current_shorts[ticker][time_stamp] = {
+            'execution_price': execution_price, 'quantity':quantity, 'market_value': 0}
+
+        self.__cash -= sell_short_value
+        self.__short_collateral += sell_short_value
+        self.__update_order_log(ticker, time_stamp, execution_price, quantity, 'open_short')
+
+    def close_short(self, time_stamp:str, ticker: str, quantity: int, price: float) -> None:
         """
         Closes a quantity of short positions on a specific symbol
         :param ticker: ticker symbol
         :param quantity: quantity to be traded
+        """
+
+        """
+        Need to account for having multiple shorts open with different replacement values based on 
+        their day of execution
         """
         raise NotImplementedError("Error: Implementation for 'sell' is required")
 
@@ -127,12 +155,6 @@ class myPortfolio(portfolio):
         new_entry = [action, quantity, execution_price, quantity*execution_price]
         self.__order_log[ticker].loc[pd.to_datetime(time_stamp)] = new_entry
 
-    @property
-    def order_log(self) -> dict:
-        """
-        Getter for giving the trader the order log
-        """
-        return self.__order_log
 
     def update_market_value(self, daily_data: dict, day_time: str) -> int:
         """
@@ -141,34 +163,40 @@ class myPortfolio(portfolio):
         :param day_time: e.g close or open
         """
         self.__market_value = 0
-        time_stamp = daily_data[self.__tickers[0]].name
+
         for ticker in self.__tickers:
-            new_price = daily_data[ticker][day_time]
-            quantity = self.__current_longs[ticker]['quantity']
 
-            self.__current_longs[ticker]['value'] = new_price * quantity
-            self.__market_value += new_price * quantity
+            current_price = daily_data[ticker][day_time]
 
+            # recalculate market value of longs
+            num_longs = self.__current_longs[ticker]['quantity']
+            self.__current_longs[ticker]['market_value'] = current_price * num_longs
+            self.__market_value += current_price * num_longs
+
+            # market value of shorts
+            for time, order in self.__current_shorts[ticker].items():
+
+                # sell value at time of short and current market price of buy back
+                original_sell_value = order['execution_price'] * order['quantity']
+                current_buyback_value = current_price * order['quantity']
+
+                order['market_value'] = original_sell_value - current_buyback_value
+                self.__market_value += order['market_value']
 
         # add new input for order log with time and values
-        self.__market_value_log.loc[pd.to_datetime(time_stamp)] = [self.__market_value + self.__cash]
+        time_stamp = daily_data[self.__tickers[0]].name
+        self.__returns_log.loc[pd.to_datetime(time_stamp)] = [self.__market_value + self.__cash + self.__short_collateral]
 
-    def net_return(self) -> int:
-        """
-        calculates the net return of the portfolio and return the percentage as a decimal
-        """
-        returns = ((self.__market_value + self.__cash)/self.__original_value) - 1
-        return returns
 
-    def graph_performance(self, start_date:str, end_date:str):
+    def graph_performance(self, start_date: str, end_date: str):
 
         # time period trader wants to visualize portfolio performance over
-        sub_set = self.__market_value_log.loc[start_date:end_date]
+        sub_set = self.__returns_log.loc[start_date:end_date]
 
         # figure to make timeseries graph of portfolio performance
         fig = go.Figure(data=[go.Scatter(
-            x = sub_set.index,
-            y = sub_set['value']
+            x=sub_set.index,
+            y=sub_set['value']
         )])
 
         fig.update_layout(
@@ -177,6 +205,22 @@ class myPortfolio(portfolio):
         )
 
         fig.show()
+
+    def net_return(self) -> int:
+        """
+        calculates the net return of the portfolio and return the percentage as a decimal
+        """
+        returns = ((self.__market_value + self.__cash)/self.__original_value) - 1
+        return returns
+
+
+
+    @property
+    def order_log(self) -> dict:
+        """
+        Getter for giving the trader the order log
+        """
+        return self.__order_log
 
     @property
     def cash(self) -> int:
@@ -198,6 +242,13 @@ class myPortfolio(portfolio):
         Returns market value of the portfolio
         """
         return self.__market_value
+
+    @property
+    def short_positions(self, *tickers):
+        """
+        Returns all short positions to the user
+        """
+        pass
 
     def liquidity(self):
         """

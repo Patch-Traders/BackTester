@@ -5,17 +5,17 @@ from patch_quant.patch_quant import patchQuant as pq
 
 class myTrader():
 
+    global GLOBAL_VAR
+
     def trade(self, lookback_data: dict, day_data:dict):
         """
         Test trading function
         :param data_set: Data set for each stock
         :return:
         """
-
-        try:
-            pq.open_long('AAPL', 1)
-        except:
-            exit('Ran out of cash')
+        if pq.portfolio_cash == 100000:
+            pq.open_short('AAPL', 58)
+            pq.open_long('AAPL', 58)
 
     def define_settings(self, settings):
         """
@@ -34,5 +34,8 @@ class myTrader():
 if __name__ == '__main__':
     pq.initialize(myTrader)
     pq.begin()
-    pq.timeseries('2019-01-01', '2019-03-30', 'AAPL')
     pq.portfolio_performance('2019-01-01', '2019-03-30')
+    print(pq.portfolio_cash)
+
+
+

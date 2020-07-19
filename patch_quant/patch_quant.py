@@ -73,12 +73,21 @@ class __patchQuant():
         :param quantity: quantity to be traded
         """
 
+        execution_day = self.__back_tester.execution_day
+        price = execution_day[ticker]['open']
+        time_stamp = execution_day[ticker].name
+        self.__portfolio.open_short(time_stamp, ticker, quantity, price)
+
     def close_short(self, ticker: str, quantity:int) -> None:
         """
         Closes a quantity of short positions on a specific symbol
         :param ticker: ticker symbol
         :param quantity: quantity to be traded
         """
+        execution_day = self.__back_tester.execution_day
+        price = execution_day[ticker]['open']
+        time_stamp = execution_day[ticker].name
+        self.__portfolio.close_short(time_stamp, ticker, quantity, price)
 
     def candlestick(self, start_date:str, end_date:str, *tickers):
         """
@@ -135,5 +144,9 @@ class __patchQuant():
     # TODO create default values for beginning and ending dates ( default arguments are only evaluated when function defined not called)
     def portfolio_performance(self, begin_date:str, end_date:str ):
         self.__portfolio.graph_performance(begin_date, end_date)
+
+    @property
+    def portfolio_cash(self):
+        return self.__portfolio.cash
 
 patchQuant = __patchQuant()

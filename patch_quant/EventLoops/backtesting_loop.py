@@ -61,7 +61,7 @@ class backTesting(eventLoop):
             self.__execution_day = data_array[1]
 
             # updates market value for risk management
-            self.__portfolio.update_market_value(data_array[1], 'close')
+            self.__portfolio.update_market_value(data_array[1], 'open')
 
             # trades with look back and daily data
             self.__trade(data_array[0], data_array[1])
