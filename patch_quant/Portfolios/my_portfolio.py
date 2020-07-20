@@ -91,16 +91,6 @@ class myPortfolio(portfolio):
         :param quantity: quantity to be traded
         """
 
-        """
-        short_log = { ticker: { total_exposure: $, positions: { datetime: $ }
-        subtract daytime from current day to calculate shorting fee percentage
-        as trader incurs loses, we will decrease the cash_reserve to that amount (not allowing leverage yet)
-        
-        have cash from short, but not allowed to access it
-        subtract short value from cash
-        each day recalculate how much short value has changed (above or below price day of trade)) 
-        """
-
         if  self.__cash < price*quantity:
             raise Exception('Error: There is not enough cash in portfolio to be provided as collateral')
         if ticker not in self.__current_longs:
@@ -119,15 +109,41 @@ class myPortfolio(portfolio):
     def close_short(self, time_stamp:str, ticker: str, quantity: int, price: float) -> None:
         """
         Closes a quantity of short positions on a specific symbol
+        # TODO consider other methods for prioritizing closing short positions
         :param ticker: ticker symbol
         :param quantity: quantity to be traded
         """
+        original_quantity = quantity
+        #TODO add exceptions concerning the quantity wanted to short
+        if not self.__current_shorts:
+            raise Exception('Error: There are no open shorts for given ticker')
 
-        """
-        Need to account for having multiple shorts open with different replacement values based on 
-        their day of execution
-        """
-        raise NotImplementedError("Error: Implementation for 'sell' is required")
+        sorted_shorts = sorted(self.__current_shorts[ticker].items(), key = lambda x: x[1]['execution_price'], reverse=True)
+        for short in sorted_shorts:
+
+            if not quantity:
+                break
+
+            # fulfilling most profitable short positions first
+            shorted_quantity = short[1]['quantity']
+            shorted_price = short[1]['execution_price']
+            shorted_date = short[0]
+
+            if quantity >= shorted_quantity:
+                quantity -= shorted_quantity
+                del self.__current_shorts[ticker][shorted_date]
+            else:
+                self.__current_shorts[ticker][shorted_date]['quantity'] -= quantity
+                quantity = 0
+
+
+            # updating cash on hand and cash needed to cover shorts
+            self.__cash += (shorted_price * shorted_quantity) - (price * quantity)
+            self.__short_collateral -= (shorted_price * shorted_quantity)
+
+
+        self.__update_order_log(ticker, time_stamp, price, original_quantity, 'close_short')
+
 
     def __execution_price(self, price: int) -> float:
         """
@@ -153,7 +169,10 @@ class myPortfolio(portfolio):
         """
 
         new_entry = [action, quantity, execution_price, quantity*execution_price]
-        self.__order_log[ticker].loc[pd.to_datetime(time_stamp)] = new_entry
+        self.__order_log[ticker] = self.__order_log[ticker].append(
+            pd.DataFrame([new_entry], index=[time_stamp], columns=self.__order_log[ticker].columns)
+        )
+
 
 
     def update_market_value(self, daily_data: dict, day_time: str) -> int:

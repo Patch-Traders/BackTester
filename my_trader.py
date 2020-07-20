@@ -13,9 +13,13 @@ class myTrader():
         :param data_set: Data set for each stock
         :return:
         """
-        if pq.portfolio_cash == 100000:
-            pq.open_short('AAPL', 58)
-            pq.open_long('AAPL', 58)
+
+        if pq.cash > 99000:
+            pq.open_short('AAPL', 10)
+        else:
+            pq.close_short('AAPL', 1)
+
+        print(pq.cash)
 
     def define_settings(self, settings):
         """
@@ -27,15 +31,16 @@ class myTrader():
         settings['Cash'] = 100000
         settings['BarSize'] = 'day'
         settings['Tickers'] = ['AAPL']
-        settings['Slippage'] = 0.2
+        settings['Slippage'] = 0.02
 
         return settings
 
 if __name__ == '__main__':
     pq.initialize(myTrader)
     pq.begin()
-    pq.portfolio_performance('2019-01-01', '2019-03-30')
-    print(pq.portfolio_cash)
+    print(pq.order_log)
+    # pq.portfolio_performance('2019-01-01', '2019-03-30')
+
 
 
 

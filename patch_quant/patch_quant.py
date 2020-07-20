@@ -146,7 +146,15 @@ class __patchQuant():
         self.__portfolio.graph_performance(begin_date, end_date)
 
     @property
-    def portfolio_cash(self):
+    def cash(self):
         return self.__portfolio.cash
+
+    @property
+    def order_log(self):
+        return self.__portfolio.order_log
+
+    @property
+    def market_value(self):
+        return self.__portfolio.market_value
 
 patchQuant = __patchQuant()
