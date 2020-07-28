@@ -14,10 +14,9 @@ You can install PatchQuant from [PyPi](https://pypi.org):
 
 
 ### How to Use
-Once the package is installed using PatchQuant is quite simple. To import simply add 
+Once the package is installed using PatchQuant is quite simple. To import simply use
     
     import PatchQuant as pq
-to your file
 
 PatchQuant expects the user to implement a class that contains two distinct functions: trade() and define_settings().
 The specific requirements of their implementation is detailed below. 
