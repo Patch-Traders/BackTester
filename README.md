@@ -3,11 +3,8 @@ PatchQuant is a python backtesting library that allows the user to simulate trad
 strategies on all stocks listed on the exchange [Alpaca](https://alpaca.markets/).  
 
 - [Installation](#installation)
-- [Features](#features)
-- [Contributing](#contributing)
+- [How to Use](#how to use)
 - [Team](#team)
-- [FAQ](#faq)
-- [Support](#support)
 - [License](#license)
 
 ### Installation
