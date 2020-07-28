@@ -78,8 +78,8 @@ Settings can be defined like so:
 The trade function is called at the beggining of each trading period and it is where the user has 
 the opportunity to execute trades. 
 
-lookback_data is a pandas dataframe containg all of the pricing data for each ticker over the lookback period
-day_data is the data for the current trading period
+lookback_data is a pandas dataframe containg all of the pricing data for each ticker over the lookback period.
+day_data is the data for the current trading period.
 
 The four most important functions to use are:
     
@@ -88,11 +88,23 @@ The four most important functions to use are:
     pq.open_short(ticker, quantity)
     pq.close_short(ticker, quantity)
 
+These functions allow you to open and close long and short positions on specific symbols.
+
+At anytime the properties: cash, order_log, and market_value are available as members of the PathQuant object.
 
 After this class is implemented you can use these functions calls to begin the backtesting
 
     pq.initialize(myTrader)
     pq.begin()
+
+After the final trading day there are a number of functions available to the user to allow them to visualize the performance of there strategy.
+
+##### pq.candlestick(start_date, end_date, \*tickers):
+This function creates a candelstick plot for the specified tickers
+
+##### pq.timeseries(start_date, end_date, \*tickers): 
+This function creates a timeseries plot for the specified tickers
+
 
 
 ### Team
