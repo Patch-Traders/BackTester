@@ -7,8 +7,9 @@ class myTrader():
 
     def trade(self, lookback_data: dict, day_data:dict):
         """
-        Test trading function
-        :param data_set: Data set for each stock
+        Trading function
+        :param lookback_data: Data set for each ticker over the lookback period
+        :param day_data: Data set for each ticker on the day of trading
         :return:
         """
 
@@ -21,7 +22,8 @@ class myTrader():
 
     def define_settings(self, settings):
         """
-        Test function that is given to event loop to define settings
+        Settings function
+        :param settings: Dictionary that defines the backtestings settings
         """
         settings['LookBack'] = 5
         settings['BeginDate'] = '2019-01-01'
@@ -37,6 +39,7 @@ if __name__ == '__main__':
     pq.initialize(myTrader)
     pq.begin()
     print(pq.order_log)
+    pq.candlestick('2019-01-01', '2019-03-30', 'AAPL')
     # pq.portfolio_performance('2019-01-01', '2019-03-30')
 
 
