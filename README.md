@@ -1,20 +1,94 @@
-# Quant-Trading
+# PatchQuant
+PatchQuant is a python backtesting library that allows the user to simulate trading 
+strategies on all stocks listed on the exchange [Alpaca](https://alpaca.markets/).  
 
-Repository for custom back testing environment for deploying algorithmic trading strategies. 
+- [Installation](#installation)
+- [Features](#features)
+- [Contributing](#contributing)
+- [Team](#team)
+- [FAQ](#faq)
+- [Support](#support)
+- [License](#license)
 
-Need to Implement: 
-- Data Acquisiton system
-- Portfolio tracking
-- Market order executions
-- Live trading deployment
-- GUI interface
-- Advanced Statistics
+### Installation
+You can install PatchQuant from [PyPi](https://pypi.org):
+    
+    pip install PatchQuant
 
 
+### How to Use
+Once the package is installed using PatchQuant is quite simple. To import simply add 
+    
+    import PatchQuant as pq
+to your file
+
+PatchQuant expects the user to implement a class that contains two distinct functions: trade() and define_settings().
+The specific requirements of their implementation is detailed below. 
+
+Once backtesting is begun PatchQuant will initially
+make a single call to the settings() function. In here the user has the opportunity to 
+configure the details of the backtesting.
+After that each trading period the trade() 
+function will be called and the user will be given the opportunity to execute trades
+in that period.
+
+An example class that the user may implement:
+
+    class myTrader():
+
+        def trade(self, lookback_data: dict, day_data:dict):
+            """
+            Trading function
+            :param lookback_data: Data set for each ticker over the lookback period
+            :param day_data: Data set for each ticker on the day of trading
+            """
+
+        def define_settings(self, settings):
+            """
+            Settings function
+            :param settings: Dictionary that defines the backtestings settings
+            :return: The settings dictionary
+            """
+ 
+            return settings
+            
+            
+##### define_settings(self, settings):
+This function is where all of the backtester settings are defined, each setting is a member of a dictionary that is
+passed to the define_settings function. It is imperative that this dictionary is returned by the function for the 
+changes to take affect.
+
+
+Settings can be defined like so:
+
+        settings['LookBack'] = 5
+        settings['BeginDate'] = '2019-01-01'
+        settings['EndDate'] = '2019-03-30'
+        settings['Cash'] = 100000
+        settings['BarSize'] = 'day'
+        settings['Tickers'] = ['AAPL']
+        settings['Slippage'] = 0.02
+        
+        
+| LookBack | The time period in days for which the strategy has access to historical data | 
+| -------- | ---------------------------------------------------------------------------- |
+* LookBack - The time period in days for which the strategy has access to historical data
+* BeginDate - The first day trading will be simulated on
+* EndDate - 
+##### trade(self, lookback_data, day_data):
+            
+
+
+After this class is implemented you can use these functions calls to begin the backtesting
+
+    pq.initialize(myTrader)
+    pq.begin()
+
+
+### Team
 This project is being developed and maintained by Hal Owens and Carson Kurtz, two college students with interests 
 in technology, finance and statistics
 
-#### Contact Us
 Hal Owens - Purdue University - owens155@purdue.edu 
 
 Carson Kurtz - Williams College - kurtzcarson@gmail.com
