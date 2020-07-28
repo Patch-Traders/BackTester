@@ -104,6 +104,9 @@ This function creates a candelstick plot for the specified tickers
 ##### pq.timeseries(start_date, end_date, \*tickers): 
 This function creates a timeseries plot for the specified tickers
 
+##### pq.portfolio_performance(start_date, end_date):
+This function creates a plot of the value of the portfolio over the time period
+
 
 
 ### Team
