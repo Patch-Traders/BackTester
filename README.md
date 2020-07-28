@@ -89,7 +89,7 @@ The four most important functions to use are:
 
 These functions allow you to open and close long and short positions on specific symbols.
 
-At anytime the properties: cash, order_log, and market_value are available as members of the PathQuant object.
+At anytime the properties cash, order_log, and market_value are available as members of the PathQuant object.
 
 After this class is implemented you can use these functions calls to begin the backtesting
 
