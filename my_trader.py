@@ -5,8 +5,6 @@ from patch_quant.patch_quant import patchQuant as pq
 
 class myTrader():
 
-    global GLOBAL_VAR
-
     def trade(self, lookback_data: dict, day_data:dict):
         """
         Test trading function
