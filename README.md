@@ -58,7 +58,6 @@ This function is where all of the backtester settings are defined, each setting 
 passed to the define_settings function. It is imperative that this dictionary is returned by the function for the 
 changes to take affect.
 
-
 Settings can be defined like so:
 
         settings['LookBack'] = 5
@@ -69,12 +68,15 @@ Settings can be defined like so:
         settings['Tickers'] = ['AAPL']
         settings['Slippage'] = 0.02
         
-        
+| Setting  | Definition |
+|----------| -----------------------------------------------------------------------------|
 | LookBack | The time period in days for which the strategy has access to historical data | 
-| -------- | ---------------------------------------------------------------------------- |
-* LookBack - The time period in days for which the strategy has access to historical data
-* BeginDate - The first day trading will be simulated on
-* EndDate - 
+| BeginDate| The first day that trading will be simulated on |
+| EnDate | The last day that trading will be simulated on |
+| Cash | Cash available to purchase with at the beggining of trading |
+| BarSize | Size of the trading period, options are: 'minute', 'hour', or 'day' |
+| Tickers | A list containing the stock tickers to be traded |
+| Slippage| A number used in slippage calculations |
 ##### trade(self, lookback_data, day_data):
             
 
