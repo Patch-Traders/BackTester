@@ -75,7 +75,18 @@ Settings can be defined like so:
 | Tickers | A list containing the stock tickers to be traded |
 | Slippage| A number used in slippage calculations |
 ##### trade(self, lookback_data, day_data):
-            
+The trade function is called at the beggining of each trading period and it is where the user has 
+the opportunity to execute trades. 
+
+lookback_data is a pandas dataframe containg all of the pricing data for each ticker over the lookback period
+day_data is the data for the current trading period
+
+The four most important functions to use are:
+    
+    pq.open_long(ticker, quantity)
+    pq.close_long(ticker, quantity)
+    pq.open_short(ticker, quantity)
+    pq.close_short(ticker, quantity)
 
 
 After this class is implemented you can use these functions calls to begin the backtesting
