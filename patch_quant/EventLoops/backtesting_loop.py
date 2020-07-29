@@ -4,13 +4,14 @@ from patch_quant.DataHandlers.alpaca import Alpaca
 
 class backTesting(eventLoop):
     """
-    This class implements the event loop abstract class for backtesting
+    Wrapped in the PatchQuant wrapper class to loop through the specified trading strategy intialized in the
+    Trader class
     """
 
     def __init__(self, trader):
         """
-        Initializes the object with the two functions that will be called within the event loop
-        :param trader:
+        Initializes the backtester with the two functions that will be called within the event loop
+        :param trader: Trader object created by the user with a unique trading function and settings
         """
 
         self.__trade = trader.trade
@@ -22,7 +23,7 @@ class backTesting(eventLoop):
 
     def __default_settings(self):
         """
-        This method initializes the settings dictionary to default values
+        Initializes the settings dictionary to default values
         """
         self.__settings['LookBack'] = 25
         self.__settings['BeginDate'] = "2019-01-01"
@@ -71,6 +72,9 @@ class backTesting(eventLoop):
 
 
     def set_portfolio(self, portfolio):
+        """
+        Sets a given portfolio for the back testing system
+        """
         self.__portfolio = portfolio
 
     @property

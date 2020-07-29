@@ -1,15 +1,14 @@
 from patch_quant.patch_quant import patchQuant as pq
 # TODO figure out how to properly organize a package
-# The way it is right now feels hacky
 
 
 class myTrader():
 
-    def trade(self, lookback_data: dict, day_data:dict):
+    def trade(self, lookback_data: dict, bar_data:dict):
         """
         Trading function
         :param lookback_data: Data set for each ticker over the lookback period
-        :param day_data: Data set for each ticker on the day of trading
+        :param bar_data: Data from most recent bar period
         :return:
         """
 
@@ -36,6 +35,7 @@ class myTrader():
         return settings
 
 if __name__ == '__main__':
+
     pq.initialize(myTrader)
     pq.begin()
     print(pq.order_log)

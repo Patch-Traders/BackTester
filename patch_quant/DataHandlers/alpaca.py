@@ -50,7 +50,7 @@ class Alpaca(dataHandler):
                 self.__begin_date -= datetime.timedelta(days=1)
                 temp_look_back -= 1
 
-    def __create_truncated_dict(self, offset):
+    def __create_truncated_dict(self, offset: int):
         """
         Truncates the full dataset
         :return truncated_data: Dataset that is truncated over the proper time period

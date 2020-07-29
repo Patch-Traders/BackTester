@@ -5,25 +5,29 @@ import plotly.graph_objects as go
 
 class myPortfolio(portfolio):
     """
-    # TODO should we execute OrderEvents (will probably help in the long run)
+    Executes long, shorts, visualizations, and history of actions for the given trading strategy
     """
 
     def __init__(self, tickers: list, cash: int , slippage: float):
         """
+        :param tickers: array of tickers in portfolio
         :param cash: initial amount of tradeable cash
         "param slippage: slippage factor between 0 and 1
         """
 
+        # initialize parameter values
         self.__tickers = tickers
         self.__original_value = cash
         self.__slippage = slippage
 
-        # tracks market value and orders over time
-        self.__cash = cash
-        self.__short_collateral = 0
+
+        self.__cash = cash  # cash on hand
+        self.__short_collateral = 0 # necessary collateral to cover shorts
+        self.__market_value = cash # market value of all positions if liquidated today
+
+        # historical logs
         self.__order_log = dict()
-        self.__market_value = cash
-        self.__returns_log =  pd.DataFrame(columns = ['value'])
+        self.__returns_log = pd.DataFrame(columns=['value'])
 
         # tracking long and short positions
         self.__current_longs = dict()
@@ -36,8 +40,7 @@ class myPortfolio(portfolio):
             self.__order_log[ticker] = pd.DataFrame(columns=[
                 'action','quantity','execution_price','order_value'])
 
-    # TODO Should the time_stamp be a datetime object?
-    # TODO consider making all order methods take dataframe of data to simply implementation of strategy
+
     def open_long(self, time_stamp: str, ticker: str, quantity: int, price: float) -> None:
         """
         Opens a quantity of long positions on a specific symbol
@@ -87,8 +90,10 @@ class myPortfolio(portfolio):
     def open_short(self, time_stamp:str, ticker: str, quantity: int, price: float) -> None:
         """
         Opens a quantity of short positions on a specific symbol
+        :param time_stamp: time of order execution
         :param ticker: ticker symbol
         :param quantity: quantity to be traded
+        :param price: price of ticker
         """
 
         if  self.__cash < price*quantity:
@@ -108,16 +113,19 @@ class myPortfolio(portfolio):
 
     def close_short(self, time_stamp:str, ticker: str, quantity: int, price: float) -> None:
         """
-        Closes a quantity of short positions on a specific symbol
         # TODO consider other methods for prioritizing closing short positions
+        Closes a quantity of short positions on a specific symbol
+        "param time_stamp: time of order execution
         :param ticker: ticker symbol
         :param quantity: quantity to be traded
+        :param price: price of ticker
         """
-        original_quantity = quantity
-        #TODO add exceptions concerning the quantity wanted to short
+
+        # TODO add exceptions concerning the quantity wanted to short
         if not self.__current_shorts:
             raise Exception('Error: There are no open shorts for given ticker')
 
+        original_quantity = quantity
         sorted_shorts = sorted(self.__current_shorts[ticker].items(), key = lambda x: x[1]['execution_price'], reverse=True)
         for short in sorted_shorts:
 
@@ -129,9 +137,12 @@ class myPortfolio(portfolio):
             shorted_price = short[1]['execution_price']
             shorted_date = short[0]
 
+            # if desired amount to short greater than most profitable position
             if quantity >= shorted_quantity:
                 quantity -= shorted_quantity
                 del self.__current_shorts[ticker][shorted_date]
+
+            # desired amount to short less than most profitable shorts
             else:
                 self.__current_shorts[ticker][shorted_date]['quantity'] -= quantity
                 quantity = 0
@@ -147,13 +158,12 @@ class myPortfolio(portfolio):
 
     def __execution_price(self, price: int) -> float:
         """
-        Estimates the actual execution price of a transaction based on a static slippage factor of .02
+        Estimates the actual execution price of a transaction based on slippage factor
         :param price: price of security transacted
         """
 
         min_price = price - (price * self.__slippage)
         max_price = price + (price * self.__slippage)
-
         execution_price = random.uniform(min_price, max_price)
 
         return execution_price
@@ -165,7 +175,7 @@ class myPortfolio(portfolio):
         :param time_stamp: time of trade
         :param execution_price: price of order execution
         :param quantity: quantity of security traded
-        :param action: e.g buy, sell, short
+        :param action: e.g open_long, close_long, open_short, close_short
         """
 
         new_entry = [action, quantity, execution_price, quantity*execution_price]
@@ -174,10 +184,9 @@ class myPortfolio(portfolio):
         )
 
 
-
-    def update_market_value(self, daily_data: dict, day_time: str) -> int:
+    def update_market_value(self, daily_data: dict, bar_time: str) -> int:
         """
-        Updates the market value of the portfolio. Utilized in the backtesting loop.
+        Updates the market value of the portfolio. Utilized in the back testing loop.
         :param daily_data: dictionary of tickers and their corresponding data frame
         :param day_time: e.g close or open
         """
@@ -185,7 +194,7 @@ class myPortfolio(portfolio):
 
         for ticker in self.__tickers:
 
-            current_price = daily_data[ticker][day_time]
+            current_price = daily_data[ticker][bar_time]
 
             # recalculate market value of longs
             num_longs = self.__current_longs[ticker]['quantity']
@@ -208,6 +217,11 @@ class myPortfolio(portfolio):
 
 
     def graph_performance(self, start_date: str, end_date: str):
+        """
+        Graphs the performance over the specified time period
+        :param start_date:
+        :param end_date:
+        """
 
         # time period trader wants to visualize portfolio performance over
         sub_set = self.__returns_log.loc[start_date:end_date]
@@ -227,7 +241,7 @@ class myPortfolio(portfolio):
 
     def net_return(self) -> int:
         """
-        calculates the net return of the portfolio and return the percentage as a decimal
+        Calculates the net return of the portfolio and return the percentage as a decimal
         """
         returns = ((self.__market_value + self.__cash)/self.__original_value) - 1
         return returns
@@ -281,11 +295,3 @@ class myPortfolio(portfolio):
         """
         pass
 
-    def plot_performance(self):
-        """
-        Need to plot holding_history
-        Dictionary where each ticker is aligned with a dataframe
-        Row/Index: timestamp
-        Columns: quantity, order_price, total_value
-        """
-        pass

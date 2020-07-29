@@ -11,7 +11,7 @@ class trader(ABC):
     @abstractmethod
     def trade(self, data_set: dict):
         """
-        This function will implement the calling of the settings function, and the handling of those settings afterwards
+        Implements the calling of the settings function, and the handling of those settings afterwards
         """
         raise NotImplementedError("Error: You must implement the trade function")
 

@@ -143,8 +143,14 @@ class __patchQuant():
 
     # TODO create default values for beginning and ending dates ( default arguments are only evaluated when function defined not called)
     def portfolio_performance(self, begin_date:str, end_date:str ):
+        """
+        Graphs the performance of the portfolio over the specified time period
+        """
         self.__portfolio.graph_performance(begin_date, end_date)
 
+    """
+    Accessor Methods
+    """
     @property
     def cash(self):
         return self.__portfolio.cash
