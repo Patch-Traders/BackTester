@@ -109,7 +109,7 @@ This function creates a plot of the value of the portfolio over the time period
 
 An Example of pq.candlestick():
 
-![alt text](https://imgur.com/BEKlRgh)
+![alt text](https://imgur.com/BEKlRgh.png)
 
 ### Team
 This project is being developed and maintained by Hal Owens and Carson Kurtz, two college students with interests 
