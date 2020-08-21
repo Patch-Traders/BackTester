@@ -30,8 +30,6 @@ class Alpaca(dataHandler):
         self.__barset_offset = 0  # Tracks the amount of times update date is being called
         self.__full_barset = self.__get_full_barset()
 
-
-
     def __correct_begin_date(self):
         """
         Because we want to be able to have a static lookback period we are uncertain of the actual first date we need

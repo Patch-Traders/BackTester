@@ -107,7 +107,9 @@ This function creates a timeseries plot for the specified tickers
 ##### pq.portfolio_performance(start_date, end_date):
 This function creates a plot of the value of the portfolio over the time period
 
+An Example of pq.candlestick():
 
+![alt text](https://imgur.com/BEKlRgh)
 
 ### Team
 This project is being developed and maintained by Hal Owens and Carson Kurtz, two college students with interests 

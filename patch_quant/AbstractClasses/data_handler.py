@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod  # module providing infrastructure for abstract base class
 
+
 class dataHandler(ABC):
     """
     Abstract Base Class to provide a framework for all data collection across all platforms
@@ -17,28 +18,6 @@ class dataHandler(ABC):
         :param look_back: lookback period in days
         """
         raise NotImplementedError("Error: Implementation of the constructor is required")
-
-    @abstractmethod
-    def __correct_begin_date(self):
-        """
-        Retrieves the correct begin date for the specified lookback period
-        """
-        raise NotImplementedError("Error: Implementation of '__correct_begin_date' is required")
-
-    @abstractmethod
-    def __create_truncated_dict(self, offest: int):
-        """
-        Truncates the full dataset
-        :return truncated_data: Dataset that is truncated over the proper time period
-        """
-        raise NotImplementedError("Error: Implementation of '__create_truncated_dict' is required")
-
-    @abstractmethod
-    def __get_full_barset(self):
-        """
-        Retrieves the full dataset from the Alpaca web api
-        """
-        raise NotImplementedError("Error: Implementation of '__get_full_barset' is required")
 
     @abstractmethod
     def get_initial_barset(self):
