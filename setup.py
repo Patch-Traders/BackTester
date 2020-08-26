@@ -5,19 +5,19 @@ with open("/home/halowens/Documents/Python/Alpaca/README.md", "r") as fh:
 
 setuptools.setup(
     name="PatchQuant",
-    version="0.1.0",
+    version="0.1.1",
     author="Hal and Carson",
     author_email="owens155@purdue.edu",
     description="Backtesting platform built around Alpaca Exchange",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/Patch-Traders/BackTester",
-    packages=['patch_quant'],
+    packages=setuptools.find_packages(),
     package_data={'path_quant': ['path_quant.py']},
     keywords=['backtesting', 'trading',
               'quantitative finance', 'finance'],
     classifiers=[
-        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.7",
         "License :: OSI Approved :: MIT License"
     ],
     entry_points={

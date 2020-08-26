@@ -1,5 +1,5 @@
-from patch_quant.EventLoops.backtesting_loop import backTesting
-from patch_quant.Portfolios.my_portfolio import myPortfolio
+from PatchQuant.EventLoops.backtesting_loop import backTesting
+from PatchQuant.Portfolios.my_portfolio import myPortfolio
 import plotly.graph_objects as go
 
 """

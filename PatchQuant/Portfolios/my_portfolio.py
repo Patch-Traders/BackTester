@@ -1,4 +1,4 @@
-from patch_quant.AbstractClasses.portfolio import portfolio
+from PatchQuant.AbstractClasses.portfolio import portfolio
 import random
 import pandas as pd
 import plotly.graph_objects as go

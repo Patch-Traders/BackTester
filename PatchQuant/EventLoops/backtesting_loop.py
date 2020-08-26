@@ -1,5 +1,5 @@
-from patch_quant.AbstractClasses.event_loop import eventLoop
-from patch_quant.DataHandlers.alpaca import Alpaca
+from PatchQuant.AbstractClasses.event_loop import eventLoop
+from PatchQuant.DataHandlers.alpaca import Alpaca
 
 
 class backTesting(eventLoop):
