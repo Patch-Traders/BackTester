@@ -16,7 +16,14 @@ You can install PatchQuant from [PyPi](https://pypi.org):
 ### How to Use
 Once the package is installed using PatchQuant is quite simple. To import simply use
     
-    import PatchQuant as pq
+    from PatchQuant.patch_quant import patchQuant as pq
+
+Before writing any code it is critical that the user defines two environment variables:
+    
+    APCA_API_KEY_ID
+    APCA_API_SECRET_KEY
+    
+These environment variables should be defined as your own Alpaca API keys.
 
 PatchQuant expects the user to implement a class that contains two distinct functions: trade() and define_settings().
 The specific requirements of their implementation is detailed below. 

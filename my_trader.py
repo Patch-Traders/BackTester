@@ -1,4 +1,4 @@
-from PatchQuant.patch_quant import patchQuant as pq
+from PatchQuant import patch_quant as pq
 # TODO figure out how to properly organize a package
 
 
