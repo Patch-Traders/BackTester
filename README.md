@@ -8,7 +8,7 @@ strategies on all stocks listed on the exchange [Alpaca](https://alpaca.markets/
 - [License](#license)
 
 ### Installation
-You can install PatchQuant from [PyPi](https://pypi.org):
+You can install PatchQuant from [PyPi](https://pypi.org/project/PatchQuant/):
     
     pip install PatchQuant
 
