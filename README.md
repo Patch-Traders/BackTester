@@ -12,7 +12,14 @@ You can install PatchQuant from [PyPi](https://pypi.org):
     
     pip install PatchQuant
 
+### Prerequisites
+This package requires the installation of two python packages to enable its functionality: alpaca_trade_api, and plotly. 
 
+Both can be installed with the following commands
+
+    pip install plotly
+    pip install alpaca_trade_api
+    
 ### How to Use
 Once the package is installed using PatchQuant is quite simple. To import simply use
     
