@@ -1,7 +1,7 @@
 import datetime
 import alpaca_trade_api as tradeapi
-from AbstractClasses.data_handler import dataHandler
-from Resources.nyse_holidays import NYSE_HOLIDAYS
+from PatchQuant.AbstractClasses.data_handler import dataHandler
+from PatchQuant.Resources.nyse_holidays import NYSE_HOLIDAYS
 
 
 class Alpaca(dataHandler):
@@ -28,7 +28,7 @@ class Alpaca(dataHandler):
         self.__bar_size = bar_size
         self.__look_back = look_back
         self.__barset_offset = 0  # Tracks the amount of times update date is being called
-        self.__full_barset = dict()
+        self.__full_barset = self.__get_full_barset()
 
     def __correct_begin_date(self):
         """
@@ -48,26 +48,32 @@ class Alpaca(dataHandler):
                 self.__begin_date -= datetime.timedelta(days=1)
                 temp_look_back -= 1
 
-    def __create_truncated_dict(self, offset):
+    def __create_truncated_dict(self, offset: int):
         """
         Truncates the full dataset
         :return truncated_data: Dataset that is truncated over the proper time period
         """
-        truncated_data = dict()
+        lookback_data = dict()
+        days_data = dict()
         for ticker in self.__full_barset:
-            truncated_data[ticker] = self.__full_barset[ticker][offset:self.__look_back + offset]
-        return truncated_data
+            lookback_data[ticker] = self.__full_barset[ticker][offset:self.__look_back + offset]
+            days_data[ticker] = self.__full_barset[ticker].iloc[self.__look_back + offset - 1]
+        return [lookback_data, days_data]
 
     def __get_full_barset(self):
         """
         Grabs the full dataset from the alpaca web api
-        #TODO Need to deal with the data size limit imposed by api.polygon.historic_agg_v2
+        # TODO Need to deal with the data size limit imposed by api.polygon.historic_agg_v2
+        # TODO investigate the exclusive nature of the alpaaca API end date
         currently only 3000 data points can be retrieved
         """
+        full_bar_set = dict()
         for ticker in self.__tickers:
-            self.__full_barset[ticker] = self.__api.polygon.historic_agg_v2(ticker, 1, self.__bar_size,
+            full_bar_set[ticker] = self.__api.polygon.historic_agg_v2(ticker, 1, self.__bar_size,
                                                                             _from=self.__begin_date.isoformat(),
                                                                             to=self.__end_date.isoformat()).df
+
+        return full_bar_set
 
     def get_initial_barset(self):
         """
@@ -77,7 +83,6 @@ class Alpaca(dataHandler):
         :return The initial dateset that goes up to the day before begin_date
         """
         self.__correct_begin_date()
-        self.__get_full_barset()
         return self.__create_truncated_dict(0)
 
     def update_barset(self):
@@ -96,3 +101,8 @@ class Alpaca(dataHandler):
         else:
             # This is the signal for the event loop to know that the trading period has ended
             return 0
+
+    @property
+    def get_full_barset(self):
+        return self.__full_barset
+

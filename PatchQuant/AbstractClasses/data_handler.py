@@ -4,7 +4,6 @@ from abc import ABC, abstractmethod  # module providing infrastructure for abstr
 class dataHandler(ABC):
     """
     Abstract Base Class to provide a framework for all data collection across all platforms
-
     Output: Generates a container holding the specified number of bars for a ticker and time frame
     """
 
@@ -23,18 +22,13 @@ class dataHandler(ABC):
     @abstractmethod
     def get_initial_barset(self):
         """
-        When implemented this method should retrieve a dataset of size lookback_length
-        with the data ending at the beginDate of that stock
+        Retrieves a dataset of size lookback_length with the data ending at the begin date of the specified period
         """
         raise NotImplementedError("Error: Implementation for 'get_latest_bars' is required")
-
-    """
-    Retrieves the latest bar from specified database to add to bar container
-    """
 
     @abstractmethod
     def update_barset(self):
         """
-        When implemented this method should push the latest bar to the relevant ticker's data structure
+        Pushes the latest bar data for each ticker in the given trading period
         """
         raise NotImplementedError("Error: Implementation for 'update_bars' is required")

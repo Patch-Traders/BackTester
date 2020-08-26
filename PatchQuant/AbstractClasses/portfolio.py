@@ -14,9 +14,9 @@ class portfolio(ABC):
         raise NotImplementedError("Error: Implementation of the constructor is required")
 
     @abstractmethod
-    def buy(self, date:str, ticker: str, quantity: int, price:int):
+    def open_long(self, ticker: str, quantity: int) -> None:
         """
-        Executes a buy order and changes portfolio holdings.
+        Opens a quantity of long positions on a specific symbol
         :param ticker: ticker symbol
         :param quantity: quantity to be traded
         """
@@ -24,9 +24,28 @@ class portfolio(ABC):
 
 
     @abstractmethod
-    def sell(self, date:str, ticker: str, quantity: int, price:int):
+    def close_long(self, ticker: str, quantity:int) -> None:
         """
-        Executes a sell order and changes portfolio holdings
+        Closes a quantity of long positions on a specific symbol
+        :param ticker: ticker symbol
+        :param quantity: quantity to be traded
+        """
+        raise NotImplementedError("Error: Implementation for 'sell' is required")
+
+    @abstractmethod
+    def open_short(self, ticker: str, quantity: int) -> None:
+        """
+        Opens a quantity of short positions on a specific symbol
+        :param ticker: ticker symbol
+        :param quantity: quantity to be traded
+        """
+        raise NotImplementedError("Error: Implementation for 'buy' is required")
+
+
+    @abstractmethod
+    def close_short(self, ticker: str, quantity:int) -> None:
+        """
+        Closes a quantity of short positions on a specific symbol
         :param ticker: ticker symbol
         :param quantity: quantity to be traded
         """
@@ -34,7 +53,7 @@ class portfolio(ABC):
 
 
     @abstractmethod
-    def current_holdings(self):
+    def current_holdings(self) -> dict:
         """
         Should return current holdings
         """
@@ -42,21 +61,21 @@ class portfolio(ABC):
 
 
     @abstractmethod
-    def market_value(self):
+    def market_value(self) -> int:
         """
         Should return marketValue
         """
         raise NotImplementedError("Error: Implementation for 'marketValue' is required")
 
     @abstractmethod
-    def update_market_value(self, daily_data:dict):
+    def update_market_value(self, daily_data:dict) -> None:
         """
         Updates the market value of the portfolio
         """
         pass
 
     @abstractmethod
-    def net_return(self):
+    def net_return(self) -> int:
         """
         Should calculate and return net Return
         """
@@ -64,7 +83,7 @@ class portfolio(ABC):
 
 
     @abstractmethod
-    def cash(self):
+    def cash(self) -> int:
         """
         Should return liquidity
         """

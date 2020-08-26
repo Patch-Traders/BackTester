@@ -9,17 +9,9 @@ class trader(ABC):
     """
 
     @abstractmethod
-    def __init__(self):
-        """
-        Here, the user is free to define any global variables that may be necessary to hold throughout the trading
-        strategy or during indiscriminate times  between bar periods
-        """
-        raise NotImplementedError("Error: Implementation of the constructor is required")
-
-    @abstractmethod
     def trade(self, data_set: dict):
         """
-        This function will implement the calling of the settings function, and the handling of those settings afterwards
+        Implements the calling of the settings function, and the handling of those settings afterwards
         """
         raise NotImplementedError("Error: You must implement the trade function")
 
