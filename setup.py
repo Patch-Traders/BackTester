@@ -5,7 +5,7 @@ with open("/home/halowens/Documents/Python/Alpaca/README.md", "r") as fh:
 
 setuptools.setup(
     name="PatchQuant",
-    version="0.1.0",
+    version="0.1.4",
     author="Hal and Carson",
     author_email="owens155@purdue.edu",
     description="Backtesting platform built around Alpaca Exchange",

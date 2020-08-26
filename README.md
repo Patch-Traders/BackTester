@@ -33,7 +33,8 @@ Before writing any code it is critical that the user defines two environment var
 These environment variables should be defined as your own Alpaca API keys.
 
 PatchQuant expects the user to implement a class that contains two distinct functions: trade() and define_settings().
-The specific requirements of their implementation is detailed below. 
+The specific requirements of their implementation is detailed below. An example implementation of this class can be found
+in [my_trader.py](my_trader.py)
 
 Once backtesting is begun PatchQuant will initially
 make a single call to the settings() function. In here the user has the opportunity to 
